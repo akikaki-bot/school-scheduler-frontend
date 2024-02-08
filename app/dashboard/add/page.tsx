@@ -47,8 +47,8 @@ export default function DashboardAdd() {
     }
 
     async function Register() {
-        console.log( user?.hid )
-        const Id = RandomId();
+        if( type === null || school === null ) return console.error(`[Worker] Failed to register school: Invalid data`);
+        const Id = 1;
         const response = await fetch(`${API_URL}/v1/school`, {
             method : "POST",
             mode: "cors",

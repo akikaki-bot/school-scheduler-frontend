@@ -62,7 +62,7 @@ export function SchoolSettingLayout({ data }: { data: BaseScheme | null }) {
                             <TableBody>
                                 <TableRow>
                                     <TableCell>{ data.details.name }</TableCell>
-                                    <TableCell>{Schools.find(v => v.value === +data.details.type.toString())?.typeName}</TableCell>
+                                    <TableCell>{Schools.find(v => v.value === +data.details.type ? data.details.type.toString() : 0)?.typeName}</TableCell>
                                     <TableCell>{ Owneruser?.username ?? "解決中.." }</TableCell>
                                 </TableRow>
                             </TableBody>

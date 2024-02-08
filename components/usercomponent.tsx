@@ -67,7 +67,7 @@ export function UserComponent({ user }: { user: User }) {
                             <Card className="py-4" key={index}>
                                 <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
                                     <p className="text-tiny uppercase font-bold">編集ページ</p>
-                                    <h4 className="font-bold text-large">{ data.details.name }{ Schools.find( v=> v.value === +data.details.type.toString() )?.typeName }</h4>
+                                    <h4 className="font-bold text-large">{ data.details.name }{ Schools.find( v=> v.value === +data.details.type ? data.details.type.toString() : 0 )?.typeName }</h4>
                                 </CardHeader>
                                 <CardBody className="overflow-visible py-2 items-center">
                                     <Link href={`/dashboard/${data?.schoolId}`}>
