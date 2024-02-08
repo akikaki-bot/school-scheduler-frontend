@@ -100,6 +100,7 @@ export function ParticlesBackGround() {
     if( init ) {
         return (
             <Particles
+                //@ts-ignore
                 options={options}
             />
         )
