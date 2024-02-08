@@ -36,7 +36,7 @@ export default function DashboardTimeLine({ params: { id } }: { params: { id: st
             loginUser?.hid === data.details.ownerId && await generateInviteCode()
         })()
 
-    }, [data !== null])
+    }, [data])
 
     if (data === null) return (
         <SidebarComopnent sid={id}>
