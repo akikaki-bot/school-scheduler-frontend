@@ -60,11 +60,11 @@ export function SchoolSettingLayout({ data }: { data: BaseScheme | null }) {
     }
     return (
         <SidebarComopnent sid={data.schoolId}>
-            <Title title={`${data.details.name}${Schools.find(v => v.value === data.details.type ? +data.details.type.toString() : 0)?.typeName}のメインページ`} />
+            <Title title={`${data.details.name}${Schools.find(v => v.value === data.details.type ? data.details.type.toString() : 0)?.typeName}のメインページ`} />
             <Content>
                 ダッシュボードへようこそ！<br />
             </Content>
-            <Title title={`${data.details.name}${Schools.find(v => v.value === data.details.type ? +data.details.type.toString() : 0)?.typeName}の詳細`} />
+            <Title title={`${data.details.name}${Schools.find(v => v.value === data.details.type ? data.details.type.toString() : 0)?.typeName}の詳細`} />
             <Content className="sm:w-3/4 lg:w-2/4">
                 <Card>
                     <CardBody>
@@ -77,7 +77,7 @@ export function SchoolSettingLayout({ data }: { data: BaseScheme | null }) {
                             <TableBody>
                                 <TableRow>
                                     <TableCell>{ data.details.name }</TableCell>
-                                    <TableCell>{Schools.find(v => v.value === data.details.type ? +data.details.type.toString() : 0)?.typeName}</TableCell>
+                                    <TableCell>{Schools.find(v => v.value === data.details.type ? data.details.type.toString() : 0)?.typeName}</TableCell>
                                     <TableCell>{ Owneruser?.username ?? "解決中.." }</TableCell>
                                 </TableRow>
                             </TableBody>
