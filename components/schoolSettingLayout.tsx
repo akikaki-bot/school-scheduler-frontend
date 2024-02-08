@@ -3,16 +3,18 @@ import { SidebarComopnent } from "./sidebarComponent";
 import { Schools } from "@/constants/schooltypes";
 import { Title } from "./title";
 import { Content } from "./content";
-import { Card, CardBody, Listbox, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@nextui-org/react";
+import { Button, Card, CardBody, Listbox, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@nextui-org/react";
 import { API_URL } from "@/constants/setting";
 import { useEffect, useState } from "react";
 import { consola , createConsola } from "consola";
+import { useRouter } from "next/navigation";
 
 
 export function SchoolSettingLayout({ data }: { data: BaseScheme | null }) {
 
     const [ Owneruser , setOwner ] = useState<User | null>( null )
     const [ IsRan , setRun ] = useState( false )
+    const router = useRouter()
 
     useEffect(() => {
         (async () => {
@@ -43,6 +45,19 @@ export function SchoolSettingLayout({ data }: { data: BaseScheme | null }) {
         setOwner(user.body.data)
     }
 
+    async function DeleteSchool() {
+        const response = await fetch(`${API_URL}/v1/school/${data?.schoolId}`, {
+            method : "DELETE",
+            mode: "cors",
+            headers : {
+                "Content-Type": "application/json",
+                "Authorization" : `Bearer ${sessionStorage.getItem('user')}`
+            },
+            credentials: "same-origin"
+        });
+        if(!response.ok) return;
+        else router.push("/dashboard")
+    }
     return (
         <SidebarComopnent sid={data.schoolId}>
             <Title title={`${data.details.name}${Schools.find(v => v.value === +data.details.type.toString())?.typeName}のメインページ`} />
@@ -62,13 +77,17 @@ export function SchoolSettingLayout({ data }: { data: BaseScheme | null }) {
                             <TableBody>
                                 <TableRow>
                                     <TableCell>{ data.details.name }</TableCell>
-                                    <TableCell>{Schools.find(v => v.value === +data.details.type ? data.details.type.toString() : 0)?.typeName}</TableCell>
+                                    <TableCell>{Schools.find(v => v.value === data.details.type ? +data.details.type.toString() : 0)?.typeName}</TableCell>
                                     <TableCell>{ Owneruser?.username ?? "解決中.." }</TableCell>
                                 </TableRow>
                             </TableBody>
                         </Table>
                     </CardBody>
                 </Card>
+            </Content>
+            <Title title="（仮）学校消す" />
+            <Content>
+                <Button color="danger" onClick={() => DeleteSchool()}> あぼーん </Button>
             </Content>
         </SidebarComopnent>
     )
