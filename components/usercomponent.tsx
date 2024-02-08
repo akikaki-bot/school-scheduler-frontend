@@ -19,15 +19,13 @@ export function UserComponent({ user }: { user: User }) {
 
         const token = sessionStorage.getItem('user');
         const response = await fetch(`${API_URL}/v1/permission`, {
-            method : "POST",
+            method : "GET",
             mode: "cors",
             headers : {
                 "Content-Type": "application/json",
+                "Authorization" : `Bearer ${sessionStorage.getItem('user')}`
             },
-            credentials: "same-origin",
-            body : JSON.stringify({
-                token : `Bearer ${token}`
-            })
+            credentials: "same-origin"
         })
         if(!response.ok) return;
         const data = await response.json()
@@ -40,16 +38,14 @@ export function UserComponent({ user }: { user: User }) {
 
     async function getSchoolInfo( id : string ){
         const token = sessionStorage.getItem('user');
-        const response = await fetch(`${API_URL}/v1/school/${id}/get`, {
-            method : "POST",
+        const response = await fetch(`${API_URL}/v1/school/${id}`, {
+            method : "GET",
             mode: "cors",
             headers : {
                 "Content-Type": "application/json",
+                "Authorization" : `Bearer ${sessionStorage.getItem('user')}`
             },
-            credentials: "same-origin",
-            body : JSON.stringify({
-                token : `Bearer ${token}`
-            })
+            credentials: "same-origin"
         })
         const data = await response.json()
         return data.body.data as BaseScheme;

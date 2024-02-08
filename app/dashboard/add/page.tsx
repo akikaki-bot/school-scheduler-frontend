@@ -32,16 +32,14 @@ export default function DashboardAdd() {
     async function InitUser( u : { t : string }) {
         /** token */
         const t = u.t
-        const response = await fetch(`${API_URL}/v1/user`, {
-            method : "POST",
+        const response = await fetch(`${API_URL}/v1/users/@me`, {
+            method : "GET",
             mode: "cors",
             headers : {
                 "Content-Type": "application/json",
+                "Authorization" : `Bearer ${t}`
             },
-            credentials: "same-origin",
-            body : JSON.stringify({
-                token : `Bearer ${t}`
-            })
+            credentials: "same-origin"
         })
         if(!response.ok) return ;
         const data = await response.json() as { body : User }
@@ -56,10 +54,10 @@ export default function DashboardAdd() {
             mode: "cors",
             headers : {
                 "Content-Type": "application/json",
+                "Authorization" : `Bearer ${sessionStorage.getItem('user')}`
             },
             credentials: "same-origin",
             body : JSON.stringify({
-                token : `Bearer ${sessionStorage.getItem('user')}`,
                 data : {
                     schoolId : Id,
                     details : {

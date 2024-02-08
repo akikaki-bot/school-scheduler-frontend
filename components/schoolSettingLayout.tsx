@@ -6,6 +6,7 @@ import { Content } from "./content";
 import { Card, CardBody, Listbox, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@nextui-org/react";
 import { API_URL } from "@/constants/setting";
 import { useEffect, useState } from "react";
+import { consola , createConsola } from "consola";
 
 
 export function SchoolSettingLayout({ data }: { data: BaseScheme | null }) {
@@ -17,6 +18,7 @@ export function SchoolSettingLayout({ data }: { data: BaseScheme | null }) {
         (async () => {
             setRun( true )
             await ResolveId( data?.details.ownerId ?? null )
+            consola.info('Resolving owner id')
         })()
     }, [ data ])
 
@@ -27,15 +29,13 @@ export function SchoolSettingLayout({ data }: { data: BaseScheme | null }) {
 
         const token = sessionStorage.getItem('user');
         const response = await fetch(`${API_URL}/v1/users/${id}`, {
-            method : "POST",
+            method : "GET",
             mode: "cors",
             headers : {
                 "Content-Type": "application/json",
+                "Authorization" : `Bearer ${token}`
             },
-            credentials: "same-origin",
-            body : JSON.stringify({
-                token : `Bearer ${token}`
-            })
+            credentials: "same-origin"
         });
         if(!response.ok) return;
 

@@ -1,14 +1,16 @@
 "use client";
 import { Content } from "@/components/content";
 import { LoadingWithSidebar } from "@/components/loading";
-import { useSchool } from "@/components/schoolComponent";
+import { useSchool } from "@/hooks/useSchool";
 import { SidebarComopnent } from "@/components/sidebarComponent";
 import { Title } from "@/components/title";
 import { API_URL } from "@/constants/setting";
 import { Dates, Subjects } from "@/constants/types/user";
-import { Button, Input } from "@nextui-org/react";
+import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { ErrorMessageComponent } from "@/components/errorMessage";
+import consola from "consola";
 
 
 function ChangeMonthToLabel( label : Dates | string ){
@@ -29,8 +31,8 @@ type Scheme = {
     class: string;
     date: Dates;
     key: string;
-    index: number;
-    value: Subjects;
+    index?: number;
+    value: Subjects | null ;
 }
 
 export default function DashboardTimeLineEdit({ params: { id, grade, classNumber, monthIndex } }: { params: { id: string, grade: string, classNumber: string, monthIndex : Dates } }) {
@@ -39,7 +41,8 @@ export default function DashboardTimeLineEdit({ params: { id, grade, classNumber
     const [ TimeLines , setTimeLines ] = useState<Subjects[] | null>( null )
     const router = useRouter()
     const [ TempTimeLines , setTempTimeLines ] = useState<{ time : number , data : Subjects }[] | null>( null )
-    
+    const [isOpen, Open] = useState(false)
+
     const [ err , setError ] = useState<string | null>( null )
     useEffect(() => {
         setTimeout(() => setError( null ) , 4000)
@@ -69,7 +72,7 @@ export default function DashboardTimeLineEdit({ params: { id, grade, classNumber
 
         const SortedTimeLine = TempTimeLines.sort(( data , _data) => data.time - _data.time);
 
-        console.log( SortedTimeLine )
+        consola.log( SortedTimeLine )
 
         const DataExtractMap = SortedTimeLine.map( v => v.data )
 
@@ -87,13 +90,33 @@ export default function DashboardTimeLineEdit({ params: { id, grade, classNumber
             }
         )
 
-        if(data !== null && TempTimeLines.length !== data?.details.defaultTimelineIndex){
+        console.log(`[Databody] : ${JSON.stringify(DataBody)}`)
+
+        if(
+            data !== null && 
+            typeof data.userDatas.find( (data) => data.class === +classNumber && data.grade === +grade)?.defaultTimelineData == "object"
+        ){
             const ClassData = data.userDatas.find( (data) => data.class === +classNumber && data.grade === +grade)
             if(ClassData){
 
-                if(ClassData.defaultTimelineData[monthIndex].length === 0 && ( TempTimeLines.length !== data?.details.defaultTimelineIndex) ){
+                if(ClassData.defaultTimelineData[monthIndex].length === 0 && ( TempTimeLines.length !== ClassData.defaultTimelineIndex) ){
                     return setError(`教科データをすべて入力して保存してください。`)
                 }
+
+                console.log("[ClassDataCheck] "+ClassData.defaultTimelineData[monthIndex].length , ClassData.defaultTimelineIndex)
+                if(ClassData.defaultTimelineData[monthIndex].length !== ClassData.defaultTimelineIndex){
+                    if(ClassData.defaultTimelineData[monthIndex].length < ClassData.defaultTimelineIndex){
+                        for( let i : number = ClassData.defaultTimelineData[monthIndex].length; i < ClassData.defaultTimelineIndex; i++){
+                            ClassData.defaultTimelineData[monthIndex].push({ name : "仮" , IsEvent : false , place : "仮" , homework : [] })
+                        }
+                    }
+                    else {
+                        console.log(`[DataTranslator] Splice array`)
+                        ClassData.defaultTimelineData[monthIndex].splice( ClassData.defaultTimelineIndex )
+                    }
+                }
+
+                
 
                 const Indexs = SortedTimeLine.map( ( data ) => data.time )
                 const Removed = ClassData.defaultTimelineData[monthIndex].map( ( _ , i ) => Indexs.includes( i + 1 ) ? null : _ )
@@ -108,7 +131,7 @@ export default function DashboardTimeLineEdit({ params: { id, grade, classNumber
                     }
                 );
 
-                console.log( Indexs , Removed , Fixed )
+                console.log(`Index : ${Indexs} , Removed : ${Removed} , Fixed : ${Fixed}`)
 
                 const DataBody = Fixed?.map(
                     (v , index) => {
@@ -135,20 +158,33 @@ export default function DashboardTimeLineEdit({ params: { id, grade, classNumber
         return await PatchSetting( DataBody )
     }
 
+    async function DeleteData() {
+        const RequestBody : Scheme = {
+            headKey : "userDatas",
+            grade : grade,
+            class : classNumber,
+            date : monthIndex,
+            key : "defaultTimelineData",
+            value : null
+        }
+
+        return await PatchSetting( [ RequestBody ] )
+    }
+
     async function PatchSetting( DataBody : Scheme[] ){
         const RequestBody = {
             schoolId : id,
-            token : `Bearer ${sessionStorage.getItem('user')}`,
             bodies : DataBody
         }
 
-        console.log( RequestBody , typeof RequestBody)
+        consola.log( RequestBody , typeof RequestBody)
         
         const response = await fetch(`${API_URL}/v1/school`, {
             method : "PATCH",
             mode: "cors",
             headers : {
                 "Content-Type": "application/json",
+                "Authorization" : `Bearer ${sessionStorage.getItem('user')}`
             },
             credentials: "same-origin",
             body : JSON.stringify(RequestBody)
@@ -159,25 +195,19 @@ export default function DashboardTimeLineEdit({ params: { id, grade, classNumber
         router.push(`/dashboard/${id}/timeline/${grade}/${classNumber}`)
     }
 
+
+
     useEffect(() => { TempTimeLines && console.log( TempTimeLines ) }, [TempTimeLines])
     useEffect(() => { data && console.log( data.details.defaultTimelineIndex ) }, [data])
 
     return (
         <SidebarComopnent sid={id} classMenu grade={+grade} classNumber={+classNumber}>
-            <div className="absolute top-20 right-2">
-                {
-                    typeof err === "string" && (
-                        <div className="bg-red-100 border border-red-400 text-red-700 px-2 py-1 rounded relative z-20" role="alert">
-                            <strong className="font-bold"> {err} </strong>
-                        </div>
-                    )
-                }
-            </div>
+            <ErrorMessageComponent err={err} />
             <Title title={`${grade}-${classNumber} / ${ChangeMonthToLabel( monthIndex )}の基本教科を編集する`} />
             <Content>
                 { !data && <LoadingWithSidebar />}
                 {
-                    data && new Array(data.details.defaultTimelineIndex).fill(0).map( ( _ , index ) => (
+                    data && new Array(data.userDatas.find( (data) => data.class === +classNumber && data.grade === +grade)?.defaultTimelineIndex).fill(0).map( ( _ , index ) => (
                         <div className="py-2" key={index}>
                             <label> {index + 1}時間目の教科</label>
                             <Input 
@@ -199,18 +229,30 @@ export default function DashboardTimeLineEdit({ params: { id, grade, classNumber
                         </div>
                     ))
                 }
-                {
-                    /*
-                <div className="grid grid-cols-2 gap-2 justify-center">
-                    <Button color="primary" variant="light"  onClick={() => void 0} disabled> 科目数を増やす </Button>
-                    <Button color="danger" variant="light" onClick={() => void 0} disabled> 科目数を減らす </Button>
-                </div>
-                    */
-                }
                 <Button color="primary" variant="light" onClick={() => toSaveRefactor()}> とりあえず保存する </Button>
                 <Button color="primary" variant="light" onClick={() => router.push(`/dashboard/${id}/timeline/${grade}/${classNumber}`)}> やっぱやめる </Button>
-
+                <Button color="danger" onPress={() => Open( true )}>この曜日の教科をリセットする</Button>
             </Content>
+            <Modal
+                isOpen={isOpen}
+                onOpenChange={Open}
+            >
+                <ModalContent>
+                    {(onClose) => (
+                        <>
+                            <ModalHeader className="flex flex-col gap-1"> 確認 </ModalHeader>
+                            <ModalBody>
+                                <p>この曜日の教科をリセットしますか？この操作は取り消せません。</p>
+                            </ModalBody>
+                            <ModalFooter>
+                                <Button color="danger" variant="light" onPress={() => DeleteData()}>
+                                    実行する
+                                </Button>
+                            </ModalFooter>
+                        </>
+                    )}
+                </ModalContent>
+            </Modal>
         </SidebarComopnent>
     )
 }

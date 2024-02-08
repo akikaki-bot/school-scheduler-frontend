@@ -22,19 +22,30 @@ export function useSchool( id : string ) {
                 await GetSchoolData( id )
             }
         })()
+        console.log(`[Worker] Registered worker`)
+        const interval = setInterval(async () => {
+            await GetSchoolData( id )
+        }, 1000 * 10)
+
+        return () => {
+            console.log(`[Worker] Unregistered worker`)
+            clearInterval(interval)
+        }
     }, [ ])
 
+    async function Worker( id : string ){
+
+    }
+
     async function GetSchoolData( id : string ){
-        const response = await fetch(`${API_URL}/v1/school/${id}/get`, {
-            method : "POST",
+        const response = await fetch(`${API_URL}/v1/school/${id}`, {
+            method : "GET",
             mode: "cors",
             headers : {
                 "Content-Type": "application/json",
+                "Authorization" : `Bearer ${sessionStorage.getItem('user')}`
             },
-            credentials: "same-origin",
-            body : JSON.stringify({
-                token : `Bearer ${sessionStorage.getItem('user')}`
-            })
+            credentials: "same-origin"
         });
         if(!response.ok) return router.push(`/`)
         if(response.ok) {

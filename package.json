@@ -9,10 +9,12 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@next/bundle-analyzer": "^14.1.0",
     "@nextui-org/react": "^2.2.9",
     "@tsparticles/engine": "^3.0.2",
     "@tsparticles/react": "^3.0.0",
     "@tsparticles/slim": "^3.0.2",
+    "consola": "^3.2.3",
     "crypto": "^1.0.1",
     "framer-motion": "^10.16.16",
     "next": "14.0.4",

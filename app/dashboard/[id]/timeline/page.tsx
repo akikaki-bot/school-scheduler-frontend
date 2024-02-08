@@ -3,7 +3,7 @@ import { SelectBox } from "@/components/box";
 import { Content } from "@/components/content";
 import { AutoModifyGrid } from "@/components/grid-cols-auto";
 import { Loading } from "@/components/loading";
-import { useSchool } from "@/components/schoolComponent";
+import { useSchool } from "@/hooks/useSchool";
 import { SidebarComopnent } from "@/components/sidebarComponent";
 import { Title } from "@/components/title";
 import { API_URL } from "@/constants/setting";
@@ -11,6 +11,7 @@ import { BaseScheme, User } from "@/constants/types/user";
 import { Button, Card, CardBody, CardHeader, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { ErrorMessageComponent } from "@/components/errorMessage";
 
 
 
@@ -36,7 +37,6 @@ export default function DashboardTimeLine({ params: { id } }: { params: { id: st
 
         const DataPut = {
             schoolId: id,
-            token: `Bearer ${sessionStorage.getItem('user')}`,
             bodies: [
                 {
                     headKey: "userDatas",
@@ -57,6 +57,7 @@ export default function DashboardTimeLine({ params: { id } }: { params: { id: st
             mode: "cors",
             headers: {
                 "Content-Type": "application/json",
+                "Authorization" : `Bearer ${sessionStorage.getItem('user')}`
             },
             credentials: "same-origin",
             body: JSON.stringify(DataPut)
@@ -67,15 +68,7 @@ export default function DashboardTimeLine({ params: { id } }: { params: { id: st
 
     return (
         <SidebarComopnent sid={id}>
-            <div className="absolute top-20 right-2">
-                {
-                    typeof err === "string" && (
-                        <div className="bg-red-100 border border-red-400 text-red-700 px-2 py-1 rounded relative z-20" role="alert">
-                            <strong className="font-bold"> {err} </strong>
-                        </div>
-                    )
-                }
-            </div>
+            <ErrorMessageComponent err={err} />
             <Title title="標準時間割の設定" />
             <Content>
                 <h1 className="py-2"> 標準時間割（変更等ない状態）の設定が出来ます。 </h1>

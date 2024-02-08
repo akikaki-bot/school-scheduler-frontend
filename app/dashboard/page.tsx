@@ -8,6 +8,7 @@ import { API_URL } from '@/constants/setting';
 import { User } from '@/constants/types/user';
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Input } from '@nextui-org/react';
 import { createCipheriv, randomBytes } from 'crypto';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react'
 
@@ -17,8 +18,6 @@ export default function Dashboard() {
 
     const [loginform, changeLoginForm] = useState(false)
     
-    const [email, setEmail] = useState<string | undefined>(undefined)
-    const [pwd, setpwd] = useState<string | undefined>(undefined)
     const [err, setErr] = useState<string | null>(null)
     const [ user , setUser ] = useState<User | null>(null)
 
@@ -36,68 +35,26 @@ export default function Dashboard() {
         if (typeof err === "string") setTimeout(() => setErr(null), 3000)
     }, [(typeof err === "string")])
 
-    async function login() {
-        if (
-            typeof email === "undefined" ||
-            typeof pwd === "undefined" ||
-            email === "" ||
-            pwd === ""
-        ) return setErr("メールアドレス、パスワードに誤りがあります。")
-
-        const response_hash = await fetch(`/api/v1/hash`, {
-            method : "POST",
-            mode: "cors",
-            headers : {
-                "Content-Type": "application/json",
-            },
-            credentials: "same-origin",
-            body : JSON.stringify({
-                text : pwd
-            })
-        })
-
-        const { hash : hashpwd, iv : iv } = await response_hash.json() as { hash : string, iv : string }
-
-        const response = await fetch(`${API_URL}/v1/login`, {
-            method : "POST",
-            mode: "cors",
-            headers : {
-                "Content-Type": "application/json",
-            },
-            credentials: "same-origin",
-            body : JSON.stringify({
-                email : email,
-                pwd : hashpwd,
-                iv : iv
-            })
-        })
-
-        if(!response.ok) return setErr(`${response.statusText} - 通信に失敗`)
-        const data = await response.json()
-        const session = sessionStorage
-        session.setItem('user', data.body.token)
-        
-        changeLoginForm(false)
-        await InitUser({ t : data.body.token })
-    }
-
     async function InitUser( u : { t : string }) {
         /** token */
         const t = u.t
-        const response = await fetch(`${API_URL}/v1/user`, {
-            method : "POST",
+        const response = await fetch(`${API_URL}/v1/users/@me`, {
+            method : "GET",
             mode: "cors",
             headers : {
                 "Content-Type": "application/json",
+                "Authorization" : `Bearer ${t}`
             },
             credentials: "same-origin",
-            body : JSON.stringify({
-                token : `Bearer ${t}`
-            })
         })
-        if(!response.ok) return setErr(`${response.statusText} - 通信に失敗`)
-        const data = await response.json() as { body : User }
-        setUser(data.body)
+        if(!response.ok) { 
+            setErr(`${response.statusText} - 再度ログインしてください。`);
+            sessionStorage.removeItem('user');
+            changeLoginForm(true);
+            return;
+        }
+        const data = await response.json() as { body : { data : User } }
+        setUser(data.body.data)
     }
 
 
@@ -120,14 +77,9 @@ export default function Dashboard() {
                     <>
                         <ModalHeader className="flex flex-col gap-1 text-2xl">HSS Dev.にログイン</ModalHeader>
                         <ModalBody>
-                            <Input onChange={(v) => setEmail(v.target.value)} type="email" placeholder="Email" label={<p className="font-bold">メールアドレス</p>} />
-                            <Input onChange={(v) => setpwd(v.target.value)} type="password" placeholder="Password" label={<p className="font-bold">パスワード</p>}/>
+                            <Button color="primary" onPress={() => router.push('/api/v1/login')}> Discordアカウントでログイン </Button>
+                            <div> アカウントがありませんか？ <Link href="/register" className=" text-blue-500">ここから作成してください。</Link></div>
                         </ModalBody>
-                        <ModalFooter>
-                            <Button color="primary" variant="light" onPress={() => login()}>
-                                Login
-                            </Button>
-                        </ModalFooter>
                     </>
                 </ModalContent>
             </Modal>

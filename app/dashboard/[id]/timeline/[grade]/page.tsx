@@ -3,7 +3,7 @@ import { SelectBox } from "@/components/box";
 import { Content } from "@/components/content";
 import { AutoModifyGrid } from "@/components/grid-cols-auto";
 import { Loading } from "@/components/loading"
-import { useSchool } from "@/components/schoolComponent"
+import { useSchool } from "@/hooks/useSchool"
 import { SidebarComopnent } from "@/components/sidebarComponent"
 import { Title } from "@/components/title"
 import { UserDatas } from "@/constants/types/user";

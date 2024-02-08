@@ -1,6 +1,7 @@
 export interface BaseUser {
     hid : number
     username : string
+    discordAccount ?: boolean
     email : string
 }
 
@@ -52,6 +53,10 @@ export interface UserDatas {
      */
     class : number | string,
     /**
+     * 基本的な時間割数
+     */
+    defaultTimelineIndex : number
+    /**
      * 時間割
      */
     timelineData: MonthData<Subjects>
@@ -63,7 +68,6 @@ export interface UserDatas {
      * 基本的な時間割
      */
     defaultTimelineData: MonthData<Subjects>
-
 }
 
 /**
