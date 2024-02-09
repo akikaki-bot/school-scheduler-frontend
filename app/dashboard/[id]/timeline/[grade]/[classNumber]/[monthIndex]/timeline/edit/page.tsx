@@ -6,7 +6,7 @@ import { SidebarComopnent } from "@/components/sidebarComponent";
 import { Title } from "@/components/title";
 import { API_URL } from "@/constants/setting";
 import { Dates, Subjects } from "@/constants/types/user";
-import { Button, Input } from "@nextui-org/react";
+import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ErrorMessageComponent } from "@/components/errorMessage";
@@ -31,8 +31,8 @@ type Scheme = {
     class: string;
     date: Dates;
     key: string;
-    index: number;
-    value: Subjects;
+    index?: number;
+    value: Subjects | null | [];
 }
 
 export default function DashboardTimeLineEdit({ params: { id, grade, classNumber, monthIndex } }: { params: { id: string, grade: string, classNumber: string, monthIndex : Dates } }) {
@@ -42,7 +42,8 @@ export default function DashboardTimeLineEdit({ params: { id, grade, classNumber
 
     const router = useRouter()
     const [ TempTimeLines , setTempTimeLines ] = useState<{ time : number , data : Subjects }[] | null>( null )
-    
+    const [isOpen, Open] = useState(false)
+
     const [ err , setError ] = useState<string | null>( null )
     useEffect(() => {
         setTimeout(() => setError( null ) , 4000)
@@ -158,6 +159,19 @@ export default function DashboardTimeLineEdit({ params: { id, grade, classNumber
         return await PatchSetting( DataBody )
     }
 
+    async function DeleteData() {
+        const RequestBody : Scheme = {
+            headKey : "userDatas",
+            grade : grade,
+            class : classNumber,
+            date : monthIndex,
+            key : "timelineData",
+            value : []
+        }
+
+        return await PatchSetting( [ RequestBody ] )
+    }
+
     async function PatchSetting( DataBody : Scheme[] ){
         const RequestBody = {
             schoolId : id,
@@ -218,7 +232,28 @@ export default function DashboardTimeLineEdit({ params: { id, grade, classNumber
                 }
                 <Button color="primary" variant="light" onClick={() => toSaveRefactor()}> とりあえず保存する </Button>
                 <Button color="primary" variant="light" onClick={() => router.push(`/dashboard/${id}/timeline/${grade}/${classNumber}`)}> やっぱやめる </Button>
+                <Button color="danger" onPress={() => Open( true )}>この曜日の教科をリセットする</Button>
             </Content>
+            <Modal
+                isOpen={isOpen}
+                onOpenChange={Open}
+            >
+                <ModalContent>
+                    {(onClose) => (
+                        <>
+                            <ModalHeader className="flex flex-col gap-1"> 確認 </ModalHeader>
+                            <ModalBody>
+                                <p>この曜日の教科をリセットしますか？この操作は取り消せません。</p>
+                            </ModalBody>
+                            <ModalFooter>
+                                <Button color="danger" variant="light" onPress={() => DeleteData()}>
+                                    実行する
+                                </Button>
+                            </ModalFooter>
+                        </>
+                    )}
+                </ModalContent>
+            </Modal>
         </SidebarComopnent>
     )
 }
