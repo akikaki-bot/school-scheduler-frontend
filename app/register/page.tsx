@@ -8,9 +8,9 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 
-export default function Register(){ 
+export default function Register() {
 
-    const [ email , setEmail ] = useState<string | null>(null)
+    const [email, setEmail] = useState<string | null>(null)
     const router = useRouter();
 
     async function PostEmail() {

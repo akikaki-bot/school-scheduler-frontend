@@ -17,9 +17,9 @@ import { useEffect, useState } from 'react'
 export default function Dashboard() {
 
     const [loginform, changeLoginForm] = useState(false)
-    
+
     const [err, setErr] = useState<string | null>(null)
-    const [ user , setUser ] = useState<User | null>(null)
+    const [user, setUser] = useState<User | null>(null)
 
 
     const router = useRouter()
@@ -28,32 +28,32 @@ export default function Dashboard() {
         const session = sessionStorage
         const logined = session.getItem('user')
         if (typeof logined === "undefined" || logined === null) return changeLoginForm(true)
-        InitUser({ t : logined })
+        InitUser({ t: logined })
     }, [])
 
     useEffect(() => {
         if (typeof err === "string") setTimeout(() => setErr(null), 3000)
     }, [(typeof err === "string")])
 
-    async function InitUser( u : { t : string }) {
+    async function InitUser(u: { t: string }) {
         /** token */
         const t = u.t
         const response = await fetch(`${API_URL}/v1/users/@me`, {
-            method : "GET",
+            method: "GET",
             mode: "cors",
-            headers : {
+            headers: {
                 "Content-Type": "application/json",
-                "Authorization" : `Bearer ${t}`
+                "Authorization": `Bearer ${t}`
             },
             credentials: "same-origin",
         })
-        if(!response.ok) { 
+        if (!response.ok) {
             setErr(`${response.statusText} - 再度ログインしてください。`);
             sessionStorage.removeItem('user');
             changeLoginForm(true);
             return;
         }
-        const data = await response.json() as { body : { data : User } }
+        const data = await response.json() as { body: { data: User } }
         setUser(data.body.data)
     }
 
@@ -83,13 +83,13 @@ export default function Dashboard() {
                     </>
                 </ModalContent>
             </Modal>
-            { 
+            {
                 (
-                    user !== null 
-                ) ? 
-                (
-                    <UserComponent user={user} />
-                ) : <Loading />
+                    user !== null
+                ) ?
+                    (
+                        <UserComponent user={user} />
+                    ) : <Loading />
             }
         </main>
     )

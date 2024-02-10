@@ -7,72 +7,89 @@ import { Button, Card, CardHeader, Input, Modal, ModalBody, ModalContent, ModalF
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { createCipheriv } from "crypto";
+import { loginForward } from "@/hooks/loginForward";
 
 
 export default function DashboardAdd() {
 
     const router = useRouter();
-    const [user , setUser] = useState<User | null>(null)
+    const [user, setUser] = useState<User | null>(null)
 
     const [school, setSchool] = useState<string | undefined>(undefined);
     const [type, setType] = useState<string | undefined>(undefined);
-    
+
+    const [ invaild , setInvaild ] = useState(false)
+    const [ isNotSelected , setNotSelected ] = useState(false)
+
 
     useEffect(() => {
         const session = sessionStorage
         const logined = session.getItem('user')
-        if (typeof logined === "undefined" || logined === null) return router.push("/dashboard")
-        InitUser({ t : logined })
+        if (typeof logined === "undefined" || logined === null) return loginForward( location , router )
+        InitUser({ t: logined })
     }, [])
 
-    function RandomId() : number {
+    useEffect(() => {
+        setNotSelected( false )
+    }, [ type ])
+
+    useEffect(() => {
+        setInvaild( false )
+    }, [ school?.length && school.length < 20 ])
+
+    function RandomId(): number {
         return Math.round(Math.random() * 10000)
     }
 
-    async function InitUser( u : { t : string }) {
+    async function InitUser(u: { t: string }) {
         /** token */
         const t = u.t
         const response = await fetch(`${API_URL}/v1/users/@me`, {
-            method : "GET",
+            method: "GET",
             mode: "cors",
-            headers : {
+            headers: {
                 "Content-Type": "application/json",
-                "Authorization" : `Bearer ${t}`
+                "Authorization": `Bearer ${t}`
             },
             credentials: "same-origin"
         })
-        if(!response.ok) return ;
-        const data = await response.json() as { body : User }
+        if (!response.ok) return;
+        const data = await response.json() as { body: User }
         setUser(data.body)
     }
 
     async function Register() {
-        if( type === null || school === null ) return console.error(`[Worker] Failed to register school: Invalid data`);
+        if (type === null || school === null || typeof school === "undefined") {
+            setNotSelected( true )
+            setInvaild( true )
+            return;
+        }
         const Id = 1;
+        if( school.length > 20) return setInvaild( true )
         const response = await fetch(`${API_URL}/v1/school`, {
-            method : "POST",
+            method: "POST",
             mode: "cors",
-            headers : {
+            headers: {
                 "Content-Type": "application/json",
-                "Authorization" : `Bearer ${sessionStorage.getItem('user')}`
+                "Authorization": `Bearer ${sessionStorage.getItem('user')}`
             },
             credentials: "same-origin",
-            body : JSON.stringify({
-                data : {
-                    schoolId : Id,
-                    details : {
-                        type : type,
-                        ownerId : user?.hid,
-                        name : school,
-                        id : Id
+            body: JSON.stringify({
+                data: {
+                    schoolId: Id,
+                    details: {
+                        type: type,
+                        ownerId: user?.hid,
+                        name: school,
+                        id: Id
                     }
                 }
             })
         });
 
-        if(!response.ok) return console.error(`[Worker] Failed to register school: ${response.statusText}`);
-        if(response.ok) {
-            const json = await response.json() as { body : { message : string , data : BaseScheme } } ;
+        if (!response.ok) return console.error(`[Worker] Failed to register school: ${response.statusText}`);
+        if (response.ok) {
+            const json = await response.json() as { body: { message: string, data: BaseScheme } };
             return router.push(`/dashboard/${json.body.data.schoolId}/`)
         }
     }
@@ -88,12 +105,12 @@ export default function DashboardAdd() {
                     <>
                         <ModalHeader className="flex flex-col gap-1 text-2xl">学校を新規で登録する</ModalHeader>
                         <ModalBody>
-                            <Input type="text" placeholder="なんとか高等学校" label={<p className="font-bold">学校名</p>} onChange={( e ) => setSchool( e.target.value )} />
-                            <Select placeholder="普通高校" label={<p className="font-bold">学校のタイプ</p>} onChange={(e) => setType( e.target.value )}>
+                            <Input isInvalid={invaild} type="text" placeholder="なんとか高等学校" label={<p className="font-bold">学校名</p>} onChange={(e) => setSchool(e.target.value)} />
+                            <Select isInvalid={isNotSelected} placeholder="普通高校" label={<p className="font-bold">学校のタイプ</p>} onChange={(e) => setType(e.target.value)}>
                                 {
-                                    Schools.map(( data , index ) => (
+                                    Schools.map((data, index) => (
                                         <SelectItem key={index} value={data.value}>
-                                            { data.typeName }
+                                            {data.typeName}
                                         </SelectItem>
                                     ))
                                 }

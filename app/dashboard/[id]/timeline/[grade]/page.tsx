@@ -10,23 +10,23 @@ import { UserDatas } from "@/constants/types/user";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react"
 
-export default function DashboardTimeLine({ params: { id , grade } }: { params: { id: string , grade : string } }) {
+export default function DashboardTimeLine({ params: { id, grade } }: { params: { id: string, grade: string } }) {
 
     const { data, user } = useSchool(id)
-    const [ isOpen , Open ] = useState( false )
+    const [isOpen, Open] = useState(false)
     const router = useRouter()
 
-    const [ GradeData , setGradeData ] = useState< UserDatas[] | null >( null )
+    const [GradeData, setGradeData] = useState<UserDatas[] | null>(null)
 
     if (typeof data !== "object") return (
         <Loading />
     )
 
     useEffect(() => {
-        const gradeData = data?.userDatas.filter( (datas) => datas.grade === +grade )
-        if(!gradeData) return;
-        setGradeData( gradeData )
-    }, [ data !== null ])
+        const gradeData = data?.userDatas.filter((datas) => datas.grade === +grade)
+        if (!gradeData) return;
+        setGradeData(gradeData)
+    }, [data !== null])
 
 
     return (
@@ -35,7 +35,7 @@ export default function DashboardTimeLine({ params: { id , grade } }: { params: 
             <Content>
                 <AutoModifyGrid isSidebarComponent>
                     {
-                        GradeData?.map( ( data , index ) => (
+                        GradeData?.map((data, index) => (
                             <SelectBox
                                 key={index}
                                 title={`${grade}-${data.class}`}

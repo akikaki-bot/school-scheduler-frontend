@@ -45,26 +45,14 @@ export function SchoolSettingLayout({ data }: { data: BaseScheme | null }) {
         setOwner(user.body.data)
     }
 
-    async function DeleteSchool() {
-        const response = await fetch(`${API_URL}/v1/school/${data?.schoolId}`, {
-            method : "DELETE",
-            mode: "cors",
-            headers : {
-                "Content-Type": "application/json",
-                "Authorization" : `Bearer ${sessionStorage.getItem('user')}`
-            },
-            credentials: "same-origin"
-        });
-        if(!response.ok) return;
-        else router.push("/dashboard")
-    }
+
     return (
         <SidebarComopnent sid={data.schoolId}>
-            <Title title={`${data.details.name}${Schools.find(v => v.value === data.details.type ? data.details.type.toString() : 0)?.typeName}のメインページ`} />
+            <Title title={`${data.details.name}のメインページ`} />
             <Content>
                 ダッシュボードへようこそ！<br />
             </Content>
-            <Title title={`${data.details.name}${Schools.find(v => v.value === data.details.type ? data.details.type.toString() : 0)?.typeName}の詳細`} />
+            <Title title={`${data.details.name}の詳細`} />
             <Content className="sm:w-3/4 lg:w-2/4">
                 <Card>
                     <CardBody>
@@ -77,17 +65,13 @@ export function SchoolSettingLayout({ data }: { data: BaseScheme | null }) {
                             <TableBody>
                                 <TableRow>
                                     <TableCell>{ data.details.name }</TableCell>
-                                    <TableCell>{Schools.find(v => v.value === data.details.type ? data.details.type.toString() : 0)?.typeName}</TableCell>
+                                    <TableCell>{Schools.find(v => v.value === ( data.details.type ? data.details.type.toString() : 0 ) )?.typeName}</TableCell>
                                     <TableCell>{ Owneruser?.username ?? "解決中.." }</TableCell>
                                 </TableRow>
                             </TableBody>
                         </Table>
                     </CardBody>
                 </Card>
-            </Content>
-            <Title title="（仮）学校消す" />
-            <Content>
-                <Button color="danger" onClick={() => DeleteSchool()}> あぼーん </Button>
             </Content>
         </SidebarComopnent>
     )

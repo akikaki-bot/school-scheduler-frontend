@@ -7,6 +7,7 @@ import { Title } from "@/components/title";
 import { Warning } from "@/components/warning";
 import { API_URL } from "@/constants/setting";
 import { BaseScheme } from "@/constants/types/user";
+import { loginForward } from "@/hooks/loginForward";
 import { Button, Card, CardHeader } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -18,14 +19,14 @@ export default function InviteUser({ params: { uuid } }: { params: { uuid: strin
     const router = useRouter()
     const [status, setStatus] = useState(900)
     const [inviteSchool, setInviteSchool] = useState<null | BaseScheme>(null)
-    const [ err , setErr ] = useState<null | string>(null)
+    const [err, setErr] = useState<null | string>(null)
 
     useEffect(() => {
         InviteGet()
     }, [])
 
     async function InviteGet() {
-        if (sessionStorage.getItem('user') == null) return router.push('/dashboard')
+        if (sessionStorage.getItem('user') == null) return loginForward(location, router)
         const response = await fetch(`${API_URL}/v1/school/invite`, {
             method: "POST",
             mode: "cors",
@@ -45,7 +46,7 @@ export default function InviteUser({ params: { uuid } }: { params: { uuid: strin
         setInviteSchool(data.body.school)
     }
 
-    async function InvitePUT(){
+    async function InvitePUT() {
         const response = await fetch(`${API_URL}/v1/school/invite`, {
             method: "PUT",
             mode: "cors",
@@ -58,8 +59,8 @@ export default function InviteUser({ params: { uuid } }: { params: { uuid: strin
                 code: uuid
             })
         })
-        if(!response.ok || response.status !== 200) return setErr(`招待を受け入れれませんでした。 : ${response.status}(${response.statusText})`);
-        else return router.push('/dashboard')
+        if (!response.ok || response.status !== 200) return setErr(`招待を受け入れれませんでした。 : ${response.status}(${response.statusText})`);
+        else return loginForward(location, router)
     }
 
     return (

@@ -5,11 +5,13 @@ import { LoadingWithSidebar } from "@/components/loading";
 import { SidebarComopnent } from "@/components/sidebarComponent";
 import { Title } from "@/components/title";
 import { UserBox } from "@/components/userbox";
+import { Warning } from "@/components/warning";
 import { API_URL } from "@/constants/setting";
 import { User } from "@/constants/types/user";
 import { useSchool } from "@/hooks/useSchool";
 import { useUser } from "@/hooks/useUser";
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@nextui-org/react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 
@@ -18,6 +20,7 @@ export default function DashboardTimeLine({ params: { id } }: { params: { id: st
 
     const { data } = useSchool(id)
     const { data: loginUser } = useUser()
+    const router = useRouter();
     const [admins, setAdmins] = useState<(null | User)[] | null>(null)
     const [owner, setOwner] = useState<User | null>(null)
     const [inviteCode, setInviteCode] = useState<string | null>(null)
@@ -25,6 +28,8 @@ export default function DashboardTimeLine({ params: { id } }: { params: { id: st
 
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const { isOpen : _deleteIsOpen, onOpen : _deleteonOpen, onOpenChange : _deleteonOpenChange } = useDisclosure();
+    const { isOpen : schoolDeleteState, onOpen : schoolDeleteOnOpen, onOpenChange : schoolDeleteonOpenChange } = useDisclosure();
+
 
 
     useEffect(() => {
@@ -113,6 +118,21 @@ export default function DashboardTimeLine({ params: { id } }: { params: { id: st
         }
     }
 
+    async function DeleteSchool() {
+        if( loginUser?.hid !== data?.details.ownerId ) return;
+        const response = await fetch(`${API_URL}/v1/school/${data?.schoolId}`, {
+            method : "DELETE",
+            mode: "cors",
+            headers : {
+                "Content-Type": "application/json",
+                "Authorization" : `Bearer ${sessionStorage.getItem('user')}`
+            },
+            credentials: "same-origin"
+        });
+        if(!response.ok) return;
+        else router.push("/dashboard")
+    }
+
     return (
         <SidebarComopnent sid={id}>
             <Title title={`コラボレーション設定`} />
@@ -178,6 +198,37 @@ export default function DashboardTimeLine({ params: { id } }: { params: { id: st
                         </ModalContent>
                     </Modal>
                 </div>
+            </Content>
+            <Title title="学校の登録を削除する" />
+            <Content>
+                <Warning className="text-xl">
+                    ・この操作は取り消せません。データも復元できません。<br />
+                    ・もしもこのボタンを間違って押してしまって、削除をしてしまった場合でも、<strong>データは復元できません。</strong><br />
+                    ・つまり運営は何も責任を取りません。このボタンを押してしまった方が責任となります。<br />
+                    ・作成者以外は削除はできません。<br />
+                </Warning>
+                <Button color="danger" onClick={() => schoolDeleteonOpenChange()} isDisabled={loginUser?.hid !== data?.details.ownerId}> 削除する（危険なボタン） </Button>
+                <Modal isOpen={schoolDeleteState} onOpenChange={schoolDeleteonOpenChange}>
+                        <ModalContent>
+                            {(onClose) => (
+                                <>
+                                    <ModalHeader className="flex flex-col gap-1 text-2xl"> 学校を削除  </ModalHeader>
+                                    <ModalBody>
+                                        本当にこの学校の登録を削除しますか？<br />
+                                        この操作は取り消せません。データも復元できません。                                    
+                                    </ModalBody>
+                                    <ModalFooter>
+                                        <Button color="danger" variant="light" onPress={() => { onClose(); DeleteSchool()}}>
+                                            消す
+                                        </Button>
+                                        <Button color="primary" variant="light" onPress={onClose}>
+                                            やめる
+                                        </Button>
+                                    </ModalFooter>
+                                </>
+                            )}
+                        </ModalContent>
+                    </Modal>
             </Content>
         </SidebarComopnent>
     )

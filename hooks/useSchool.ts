@@ -2,6 +2,7 @@ import { API_URL } from "@/constants/setting";
 import { BaseScheme, User } from "@/constants/types/user";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { loginForward } from "./loginForward";
 
 
 
@@ -18,7 +19,7 @@ export function useSchool( id : string ) {
             if( !isRan ){
                 const session = sessionStorage
                 const logined = session.getItem('user')
-                if (typeof logined === "undefined" || logined === null) return router.push("/dashboard")
+                if (typeof logined === "undefined" || logined === null) return loginForward( location , router )
                 await GetSchoolData( id )
             }
         })()

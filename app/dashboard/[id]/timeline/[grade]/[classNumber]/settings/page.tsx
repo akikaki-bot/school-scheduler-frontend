@@ -18,18 +18,18 @@ export default function DashboardTimeLine({ params: { id, grade, classNumber } }
     const router = useRouter()
 
     // Values
-    const [DefaultTimeLineIndex, setDefaultTimeIndex] = useState<number | null>( null )
+    const [DefaultTimeLineIndex, setDefaultTimeIndex] = useState<number | null>(null)
 
     useEffect(() => {
         SetInput()
     }, [data !== null])
 
     function SetInput() {
-        if( data === null) return;
+        if (data === null) return;
         const classData = data?.userDatas.find((data) => data.class == +classNumber && data.grade == +grade);
         if (!classData) return;
-        console.log( classData.defaultTimelineIndex )
-        setDefaultTimeIndex( classData.defaultTimelineIndex )
+        console.log(classData.defaultTimelineIndex)
+        setDefaultTimeIndex(classData.defaultTimelineIndex)
     }
 
     async function SaveDefaultTimeline() {
@@ -38,7 +38,7 @@ export default function DashboardTimeLine({ params: { id, grade, classNumber } }
             mode: "cors",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization" : `Bearer ${sessionStorage.getItem('user')}`
+                "Authorization": `Bearer ${sessionStorage.getItem('user')}`
             },
             credentials: "same-origin",
             body: JSON.stringify({
@@ -63,14 +63,14 @@ export default function DashboardTimeLine({ params: { id, grade, classNumber } }
             <Title title={`デフォルトの時間割数`} />
             <Content>
                 {
-                    DefaultTimeLineIndex !== null ? 
-                    (
-                        <>
-                            <Input type="number" min="1" onChange={((e) => setDefaultTimeIndex( +e.target.value ))} defaultValue={String(DefaultTimeLineIndex)}/>
-                            <Button color="success" className="py-2"  onClick={() => SaveDefaultTimeline()}> 保存 </Button>
-                        </>
-                    ) 
-                    : <LoadingWithSidebar />
+                    DefaultTimeLineIndex !== null ?
+                        (
+                            <>
+                                <Input type="number" min="1" onChange={((e) => setDefaultTimeIndex(+e.target.value))} defaultValue={String(DefaultTimeLineIndex)} />
+                                <Button color="success" className="py-2" onClick={() => SaveDefaultTimeline()}> 保存 </Button>
+                            </>
+                        )
+                        : <LoadingWithSidebar />
                 }
             </Content>
         </SidebarComopnent>

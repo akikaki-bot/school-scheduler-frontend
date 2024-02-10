@@ -22,7 +22,7 @@ export default function DashboardTimeLine({ params: { id, grade, classNumber } }
     const [monthIndex, setMonthIndex] = useState<Dates>("mon")
     const [monthIndexWeek, setMonthIndexWeek] = useState<Dates>("mon")
 
-    const [ resetState , setResetState ] = useState<boolean>( false )
+    const [resetState, setResetState] = useState<boolean>(false)
 
 
     const [defaultIndex, setDefaultIndex] = useState<number | null>(null)
@@ -91,11 +91,11 @@ export default function DashboardTimeLine({ params: { id, grade, classNumber } }
         const classData = data?.userDatas.find((data) => data.class == +classNumber && data.grade == +grade)
         if (typeof classData === "undefined") return;
         if (typeof classData.defaultTimelineIndex === "undefined") return Open(isOpen ? false : true)
-        else router.push(`${classNumber}/${monthIndex}/timeline/edit`)
+        else router.push(`${classNumber}/${monthIndexWeek}/timeline/edit`)
     }
 
     async function migrateTimeLineData() {
-        setResetState( true )
+        setResetState(true)
         const response = await fetch(`${API_URL}/v1/school/${id}/migration`, {
             method: "POST",
             mode: "cors",
@@ -110,7 +110,7 @@ export default function DashboardTimeLine({ params: { id, grade, classNumber } }
             })
         })
         if (!response.ok) return setError(`エラーが発生しました。\nサーバーが無効な返答をしました : ${response.statusText}`);
-        else return setResetState( false );
+        else return setResetState(false);
     }
 
     return (
@@ -184,7 +184,7 @@ export default function DashboardTimeLine({ params: { id, grade, classNumber } }
                         ・自動リセットが実行されると、<strong>変更された教科なども標準時間割通りの設定となります。</strong><br />
                         ・<strong>まだ実装のされていない機能です。</strong>将来的に削除される可能性があります。
                     </Warning>
-                    <Button color={`danger`} variant="ghost"  disabled> 実装中です。もうちょっと待ってね </Button>
+                    <Button color={`danger`} variant="ghost" disabled> 実装中です。もうちょっと待ってね </Button>
                 </GridChildren>
                 <GridChildren paddingX={2} paddingY={2} IsHeightFull={false} className="gap-4">
                     <h1 className="text-xl sm:text-2xl font-bold opacity-70">一週間の時間割を今リセットする</h1>
@@ -193,7 +193,7 @@ export default function DashboardTimeLine({ params: { id, grade, classNumber } }
                         ・この操作は元に戻すことはできません。<br />
                         ・リセットが実行されると、<strong>変更された教科なども標準時間割通りの設定となります。</strong><br />
                     </Warning>
-                    <Button color={`danger`} onPress={() => migrateTimeLineData()}>{resetState && <Spinner color="white" />} { resetState ? "実行中" : "リセット"} </Button>
+                    <Button color={`danger`} onPress={() => migrateTimeLineData()}>{resetState && <Spinner color="white" />} {resetState ? "実行中" : "リセット"} </Button>
                 </GridChildren>
                 <GridChildren paddingX={2} paddingY={2} IsHeightFull={false} className="gap-4 min-h-1/2">
                     <h1 className="text-xl sm:text-2xl font-bold opacity-70">設定されている一週間の時間割</h1>

@@ -21,12 +21,12 @@ export default function DashboardTimeLine({ params: { id } }: { params: { id: st
     const [isOpen, Open] = useState(false)
     const router = useRouter()
 
-    const [ err , setError ] = useState<string | null>( null )
+    const [err, setError] = useState<string | null>(null)
     const [grade, setGrade] = useState<number | null>(null)
     const [classNumber, setClassNumber] = useState<number | null>(null)
 
     useEffect(() => {
-        setTimeout(() => setError( null ) , 4000)
+        setTimeout(() => setError(null), 4000)
     }, [typeof err === "string"])
 
     if (typeof data !== "object") return (
@@ -57,7 +57,7 @@ export default function DashboardTimeLine({ params: { id } }: { params: { id: st
             mode: "cors",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization" : `Bearer ${sessionStorage.getItem('user')}`
+                "Authorization": `Bearer ${sessionStorage.getItem('user')}`
             },
             credentials: "same-origin",
             body: JSON.stringify(DataPut)
