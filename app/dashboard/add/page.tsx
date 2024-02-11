@@ -3,10 +3,9 @@
 import { Schools } from "@/constants/schooltypes";
 import { API_URL } from "@/constants/setting";
 import { BaseScheme, User } from "@/constants/types/user";
-import { Button, Card, CardHeader, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Select, SelectItem } from "@nextui-org/react";
+import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Select, SelectItem } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import { createCipheriv } from "crypto";
 import { loginForward } from "@/hooks/loginForward";
 
 
@@ -37,10 +36,6 @@ export default function DashboardAdd() {
         setInvaild( false )
     }, [ school?.length && school.length < 20 ])
 
-    function RandomId(): number {
-        return Math.round(Math.random() * 10000)
-    }
-
     async function InitUser(u: { t: string }) {
         /** token */
         const t = u.t
@@ -65,7 +60,7 @@ export default function DashboardAdd() {
             return;
         }
         const Id = 1;
-        if( school.length > 20) return setInvaild( true )
+        if( school.length > 20 || school.length < 1 ) return setInvaild( true )
         const response = await fetch(`${API_URL}/v1/school`, {
             method: "POST",
             mode: "cors",

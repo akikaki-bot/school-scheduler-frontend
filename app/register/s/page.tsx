@@ -20,6 +20,7 @@ export default function S() {
         sessionStorage.setItem('user', token);
         const location = localStorage.getItem('state');
         if (location === null) return router.push('/dashboard');
+        localStorage.removeItem('state');
         router.push(location);
     }, [])
     return (

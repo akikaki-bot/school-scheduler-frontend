@@ -1,8 +1,4 @@
 "use client";
-import { API_URL } from "@/constants/setting"
-import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
-import { BaseScheme, User } from "@/constants/types/user";
 import { Loading } from "@/components/loading";
 import { SchoolSettingLayout } from "@/components/schoolSettingLayout";
 import { useSchool } from "@/hooks/useSchool";

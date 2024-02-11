@@ -5,7 +5,7 @@ import { useSchool } from "@/hooks/useSchool"
 import { SidebarComopnent } from "@/components/sidebarComponent"
 import { Title } from "@/components/title"
 import { API_URL } from "@/constants/setting";
-import { DateChangeArray, Dates, MonthData, UserDatas } from "@/constants/types/user";
+import { DateChangeArray, Dates, UserDatas } from "@/constants/types/user";
 import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Select, SelectItem, Spinner } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react"

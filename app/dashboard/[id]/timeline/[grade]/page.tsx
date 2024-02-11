@@ -13,7 +13,6 @@ import { useEffect, useState } from "react"
 export default function DashboardTimeLine({ params: { id, grade } }: { params: { id: string, grade: string } }) {
 
     const { data, user } = useSchool(id)
-    const [isOpen, Open] = useState(false)
     const router = useRouter()
 
     const [GradeData, setGradeData] = useState<UserDatas[] | null>(null)

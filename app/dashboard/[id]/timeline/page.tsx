@@ -7,8 +7,7 @@ import { useSchool } from "@/hooks/useSchool";
 import { SidebarComopnent } from "@/components/sidebarComponent";
 import { Title } from "@/components/title";
 import { API_URL } from "@/constants/setting";
-import { BaseScheme, User } from "@/constants/types/user";
-import { Button, Card, CardBody, CardHeader, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/react";
+import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ErrorMessageComponent } from "@/components/errorMessage";
@@ -46,7 +45,8 @@ export default function DashboardTimeLine({ params: { id } }: { params: { id: st
                     key: "defaultTimelineData",
                     index: 1,
                     value: {
-                        name: "初期の値"
+                        name: "初期の値",
+                        place : "初期値"
                     }
                 }
             ]
