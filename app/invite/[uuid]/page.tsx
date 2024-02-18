@@ -8,7 +8,7 @@ import { Warning } from "@/components/warning";
 import { API_URL } from "@/constants/setting";
 import { BaseScheme } from "@/constants/types/user";
 import { loginForward } from "@/hooks/loginForward";
-import { Button, Card, CardHeader } from "@nextui-org/react";
+import { Button } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 

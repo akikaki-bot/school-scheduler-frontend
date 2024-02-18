@@ -46,7 +46,9 @@ export default function DashboardTimeLine({ params: { id } }: { params: { id: st
                     index: 1,
                     value: {
                         name: "初期の値",
-                        place : "初期値"
+                        place : "初期値",
+                        homework : null,
+                        IsEvent : false
                     }
                 }
             ]
