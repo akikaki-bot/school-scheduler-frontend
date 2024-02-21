@@ -1,10 +1,12 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Inter, Noto_Sans_JP } from 'next/font/google'
 import './globals.css'
 import { Root } from './root'
 import { NavigationBar } from '@/components/navbar'
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Noto_Sans_JP({ subsets: ['latin'] })
+
+
 
 export const metadata: Metadata = {
 	title: 'HS API Developers',
@@ -17,7 +19,7 @@ export default function RootLayout({
 	children: React.ReactNode
 }) {
 	return (
-		<html lang="en">
+		<html lang="ja">
 			<body className={inter.className}>
 				<Root>
 					<NavigationBar />
