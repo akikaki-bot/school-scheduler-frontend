@@ -10,6 +10,12 @@ export interface User extends BaseUser {
     developerInfo ?: DeveloperSetting
 }
 
+export interface BotUser extends User {
+    description : string,
+    ownerId : string
+    isBot : boolean
+}
+
 export interface DeveloperSetting {
     token : string | null
     redirects : string[]

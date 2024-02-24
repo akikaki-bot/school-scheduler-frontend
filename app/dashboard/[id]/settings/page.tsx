@@ -7,7 +7,7 @@ import { Title } from "@/components/title";
 import { UserBox } from "@/components/userbox";
 import { Warning } from "@/components/warning";
 import { API_URL } from "@/constants/setting";
-import { User } from "@/constants/types/user";
+import { BotUser, User } from "@/constants/types/user";
 import { useSchool } from "@/hooks/useSchool";
 import { useUser } from "@/hooks/useUser";
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@nextui-org/react";
@@ -21,7 +21,7 @@ export default function DashboardTimeLine({ params: { id } }: { params: { id: st
     const { data } = useSchool(id)
     const { data: loginUser } = useUser()
     const router = useRouter();
-    const [admins, setAdmins] = useState<(null | User)[] | null>(null)
+    const [admins, setAdmins] = useState<(null | User | BotUser)[] | null>(null)
     const [owner, setOwner] = useState<User | null>(null)
     const [inviteCode, setInviteCode] = useState<string | null>(null)
     const [ deleteId , setDeleteId ] = useState<string|null>( null )
@@ -143,7 +143,8 @@ export default function DashboardTimeLine({ params: { id } }: { params: { id: st
                 <div>
                     {
                         admins?.map((user, index) => (
-                            <UserBox key={index} user={user} IsOwner={user?.hid == owner?.hid} onPress={() => { setDeleteId( String(user?.hid) ); _deleteonOpen();}} />
+                            //@ts-ignore
+                            <UserBox isBot={typeof user?.isBot !== "undefined" && user?.isBot} key={index} user={user} IsOwner={user?.hid == owner?.hid} onPress={() => { setDeleteId( String(user?.hid ?? data.details.admins[index]) ); _deleteonOpen();}} />
                         ))
                     }
                     {loginUser?.hid == owner?.hid && <Button color="primary" onPress={() => onOpen()}> <LinkIcon /> 新しく共同管理者を招待する </Button>}
