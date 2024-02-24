@@ -191,6 +191,27 @@ export default function User() {
 
     }
 
+    async function regenerateUserToken() {
+        const response = await fetch(`${API_URL}/v1/users/accessToken`, {
+            method : "PUT",
+            mode: "cors",
+            headers : {
+                "Content-Type": "application/json",
+                "Authorization" : `Bearer ${sessionStorage.getItem('user')}`
+            },
+            credentials: "same-origin"
+        })
+
+        if(!response.ok){
+            const errorResponse = await response.json() as { body : { message : string }}
+            setErr(errorResponse.body.message)
+            return;
+        }
+
+        const data = await response.json() as { body : { token : string } }
+        sessionStorage.setItem('user', data.body.token);
+    }
+
     async function resolveApplication ( id : string ) {
         const response = await fetch(`${API_URL}/v1/users/${id}`, {
             method : "GET",
@@ -226,6 +247,7 @@ export default function User() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:w-1/2">
                         <Button color="warning" onPress={() => setDisplayState(displayAccessToken ? false : true)}>アクセストークンを{displayAccessToken ? "隠す" : "表示する"}</Button>
                         {displayAccessToken && <Button color="primary" onPress={() => copyToken()}>コピーする</Button>}
+                        <Button color="danger" onPress={() => regenerateUserToken()}> 再生成する </Button>
                     </div>
                 </Content>
                 <Title title={`APIアプリケーション`} />
