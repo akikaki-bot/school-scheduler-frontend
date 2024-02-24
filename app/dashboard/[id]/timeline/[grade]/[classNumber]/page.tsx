@@ -151,7 +151,7 @@ export default function DashboardTimeLine({ params: { id, grade, classNumber } }
                                 (
                                     <tr key={index1 + 1120}>
                                         <td key={index1 + 12212} className="border border-slate-300 text-center py-3"> {index1 + 1}時間目 </td>
-                                        <td key={index1} className="border border-slate-300 text-center py-3"> {data.name} </td>
+                                        <td key={index1} className="border border-slate-300 text-center py-3"> {data === null ? "不明" : data.name} </td>
                                     </tr>
                                 )
                                 )
@@ -231,7 +231,7 @@ export default function DashboardTimeLine({ params: { id, grade, classNumber } }
                                     (
                                         <tr key={index1 + 1120}>
                                             <td key={index1 + 12212} className="border border-slate-300 text-center py-3"> {index1 + 1}時間目 </td>
-                                            <td key={index1} className="border border-slate-300 text-center py-3"> {data.name} </td>
+                                            <td key={index1} className="border border-slate-300 text-center py-3"> {data === null ? "不明" : data.name} </td>
                                         </tr>
                                     )
                                     )
