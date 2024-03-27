@@ -8,14 +8,17 @@ import { API_URL } from "@/constants/setting";
 import { Button, Input } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useClass } from "@/hooks/useClass";
 
 
 
 
 export default function DashboardTimeLine({ params: { id, grade, classNumber } }: { params: { id: string, grade: string, classNumber: string } }) {
 
-    const { data, user } = useSchool(id)
+    //const { data, user } = useSchool(id)
     const router = useRouter()
+
+    const { data , user } = useClass( id , grade , classNumber )
 
     // Values
     const [DefaultTimeLineIndex, setDefaultTimeIndex] = useState<number | null>(null)
@@ -26,14 +29,14 @@ export default function DashboardTimeLine({ params: { id, grade, classNumber } }
 
     function SetInput() {
         if (data === null) return;
-        const classData = data?.userDatas.find((data) => data.class == +classNumber && data.grade == +grade);
+        const classData = data
         if (!classData) return;
         console.log(classData.defaultTimelineIndex)
         setDefaultTimeIndex(classData.defaultTimelineIndex)
     }
 
     async function SaveDefaultTimeline() {
-        const response = await fetch(`${API_URL}/v1/school/${id}/patchsetting`, {
+        const response = await fetch(`${API_URL}/v1/school/${id}/userdatas/${grade}/${classNumber}/sun`, {
             method: "PATCH",
             mode: "cors",
             headers: {
@@ -42,12 +45,13 @@ export default function DashboardTimeLine({ params: { id, grade, classNumber } }
             },
             credentials: "same-origin",
             body: JSON.stringify({
-                data: {
-                    headInfo: "userDatas",
-                    gradeClass: { grade: +grade, class: +classNumber },
-                    patchHeader: "defaultTimelineIndex",
-                    value: DefaultTimeLineIndex
-                }
+                bodies: [
+                    {
+                        key: "defaultTimelineIndex",
+                        state : "update",
+                        value : DefaultTimeLineIndex
+                    }
+                ]
             })
         })
         if (!response.ok) return;

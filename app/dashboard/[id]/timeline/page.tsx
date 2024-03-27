@@ -11,6 +11,7 @@ import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ErrorMessageComponent } from "@/components/errorMessage";
+import { defaultTimelineDataChangeRequest } from "@/constants/types/user";
 
 
 
@@ -34,6 +35,7 @@ export default function DashboardTimeLine({ params: { id } }: { params: { id: st
 
     async function putClass() {
 
+        /*
         const DataPut = {
             schoolId: id,
             bodies: [
@@ -52,9 +54,22 @@ export default function DashboardTimeLine({ params: { id } }: { params: { id: st
                     }
                 }
             ]
+        }*/
+        const DataPut : { bodies : defaultTimelineDataChangeRequest[] } = {
+            bodies : [
+                {
+                    key : "defaultTimelineData",
+                    state : "add",
+                    value : {
+                        name: "初期の値",
+                        place : "初期値",
+                        IsEvent : false,                    
+                    }
+                }
+            ]
         }
 
-        const response = await fetch(`${API_URL}/v1/school`, {
+        const response = await fetch(`${API_URL}/v1/school/${id}/userdatas/${grade}/${classNumber}/sun`, {
             method: "PATCH",
             mode: "cors",
             headers: {

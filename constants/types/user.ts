@@ -1,29 +1,5 @@
-export interface BaseUser {
-    hid : number
-    username : string
-    discordAccount ?: boolean
-    email : string
-}
 
-export interface User extends BaseUser {
-    developer : boolean
-    developerInfo ?: DeveloperSetting
-}
-
-export interface BotUser extends User {
-    description : string,
-    ownerId : string
-    isBot : boolean
-}
-
-export interface DeveloperSetting {
-    token : string | null
-    redirects : string[]
-    applicationName : string[]
-}
-
-
-
+export const DateChangeArray  = ["sun","mon","tue","wed","thu","fri","sat"]
 /**
  * ベースとなるスキーマ
  */
@@ -43,7 +19,6 @@ export interface BaseScheme {
 }
 
 export type Dates = "sun" | "mon" | "tue" | "wed" | "thu" | "fri" | "sat"
-export const DateChangeArray  = ["sun","mon","tue","wed","thu","fri","sat"]
 
 export type BaseObjectType = {
     [ key : string ]: number | object | string
@@ -59,10 +34,6 @@ export interface UserDatas {
      */
     class : number | string,
     /**
-     * 基本的な時間割数
-     */
-    defaultTimelineIndex : number
-    /**
      * 時間割
      */
     timelineData: MonthData<Subjects>
@@ -71,9 +42,17 @@ export interface UserDatas {
      */
     eventData: MonthData<EventData>
     /**
+     * 宿題データ
+     */
+    homework: Homework[] | []
+    /**
      * 基本的な時間割
      */
     defaultTimelineData: MonthData<Subjects>
+    /**
+     * 基本的な時間割数
+     */
+    defaultTimelineIndex : number
 }
 
 /**
@@ -82,13 +61,13 @@ export interface UserDatas {
  * 各keyのデータはT[]となります。
  */
 export interface MonthData<T> {
-    sun: T[]
-    mon: T[],
-    tue: T[],
-    wed: T[],
-    thu: T[],
-    fri: T[]
-    sat: T[]
+    sun: T[] | []
+    mon: T[] | []
+    tue: T[] | []
+    wed: T[] | []
+    thu: T[] | []
+    fri: T[] | []
+    sat: T[] | []
 }
 
 /**
@@ -123,10 +102,6 @@ export interface Subjects {
      * @nullable
      */
     place: null | string,
-    /**
-     * 提出物
-     */
-    homework: Homework[],
 
     IsEvent: boolean
 }
@@ -181,13 +156,76 @@ export interface DetailSchool extends BaseObjectType {
     /**
      * 登録代表ユーザー
      */
-    ownerId: number,
+    ownerId: string,
     /**
      * 管理者
      */
-    admins: number[]    
-    /**
-    * 基本的な時間割数
-    */
-    defaultTimelineIndex : number
+    admins: string[]
+}
+
+export interface InviteData {
+    id : string
+    code : string
+}
+
+export interface timelineDataChangeRequest {
+    key: "timelineData",
+    value: Subjects[] | Subjects
+    state: "add" | "remove" | "update"
+    index?: number,
+}
+
+export interface defaultTimelineDataChangeRequest {
+    key: "defaultTimelineData",
+    value: Subjects[] | Subjects | null
+    state: "add" | "remove" | "update"
+    index?: number,
+}
+
+export interface eventDataChangeRequest {
+    key: "eventData",
+    value: EventData[] | EventData
+    state: "add" | "remove" | "update"
+    index?: number,
+}
+
+export interface homeworkDataChangeRequest {
+    key: "homework",
+    value: Homework[] | Homework
+    state: "add" | "remove" | "update"
+    index?: number,
+}
+
+export interface BaseUser {
+    hid : string
+    discordAccount ?: boolean
+    username : string
+    email ?: string
+}
+
+export interface User extends BaseUser {
+    developer : boolean
+    developerInfo ?: DeveloperSetting
+    isBot : boolean
+}
+
+export interface BotUser extends User {
+    description : string,
+    ownerId : string
+    
+}
+
+export interface DeveloperSetting {
+    token : string | null
+    redirects : string[]
+    schoolIds : number[]
+}
+
+export interface CreateUser extends User {
+    password ?: string
+}
+
+export interface CreateBotUser extends User {
+    description : string,
+    ownerId : string
 }

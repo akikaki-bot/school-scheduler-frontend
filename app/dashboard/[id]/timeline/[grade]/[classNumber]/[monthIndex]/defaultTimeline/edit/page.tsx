@@ -5,7 +5,7 @@ import { useSchool } from "@/hooks/useSchool";
 import { SidebarComopnent } from "@/components/sidebarComponent";
 import { Title } from "@/components/title";
 import { API_URL } from "@/constants/setting";
-import { Dates, Subjects } from "@/constants/types/user";
+import { Dates, Subjects, defaultTimelineDataChangeRequest } from "@/constants/types/user";
 import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -79,14 +79,11 @@ export default function DashboardTimeLineEdit({ params: { id, grade, classNumber
         const DataBody = DataExtractMap?.map(
             (v, index) => {
                 return {
-                    headKey: "userDatas",
-                    grade: grade,
-                    class: classNumber,
-                    date: monthIndex,
                     key: "defaultTimelineData",
                     index: index,
-                    value: v
-                }
+                    value: v,
+                    state : "update"
+                } as defaultTimelineDataChangeRequest
             }
         )
 
@@ -107,7 +104,8 @@ export default function DashboardTimeLineEdit({ params: { id, grade, classNumber
                 if (ClassData.defaultTimelineData[monthIndex].length !== ClassData.defaultTimelineIndex) {
                     if (ClassData.defaultTimelineData[monthIndex].length < ClassData.defaultTimelineIndex) {
                         for (let i: number = ClassData.defaultTimelineData[monthIndex].length; i < ClassData.defaultTimelineIndex; i++) {
-                            ClassData.defaultTimelineData[monthIndex].push({ name: "仮", IsEvent: false, place: "仮", homework: [] })
+                            //@ts-ignore
+                            ClassData.defaultTimelineData[monthIndex as Dates].push({ name: "なし", IsEvent: false, place: "なし"})
                         }
                     }
                     else {
@@ -136,16 +134,13 @@ export default function DashboardTimeLineEdit({ params: { id, grade, classNumber
                 const DataBody = Fixed?.map(
                     (v, index) => {
                         return {
-                            headKey: "userDatas",
-                            grade: grade,
-                            class: classNumber,
-                            date: monthIndex,
                             key: "defaultTimelineData",
                             index: index,
-                            value: v
-                        }
+                            value: v,
+                            state: "update"
+                        } as defaultTimelineDataChangeRequest
                     }
-                ).sort((a, b) => a.index - b.index)
+                ).sort((a, b) => ( a.index as number ) - ( b.index as number ) )
 
                 return await PatchSetting(DataBody)
             }
@@ -159,27 +154,27 @@ export default function DashboardTimeLineEdit({ params: { id, grade, classNumber
     }
 
     async function DeleteData() {
-        const RequestBody: Scheme = {
-            headKey: "userDatas",
-            grade: grade,
-            class: classNumber,
-            date: monthIndex,
-            key: "defaultTimelineData",
-            value: null
-        }
+        const defaultTimelineIndex = data?.userDatas.find((data) => data.class === +classNumber && data.grade === +grade)?.defaultTimelineIndex
+        const RequestBody : defaultTimelineDataChangeRequest[] = new Array(
+            defaultTimelineIndex
+        ).map( ( _ , index ) => ({
+            key : "defaultTimelineData",
+            state : "remove",
+            index : index,
+            value : null
+        }))
 
-        return await PatchSetting([RequestBody])
+        return await PatchSetting(RequestBody)
     }
 
-    async function PatchSetting(DataBody: Scheme[]) {
+    async function PatchSetting(DataBody: defaultTimelineDataChangeRequest[]) {
         const RequestBody = {
-            schoolId: id,
             bodies: DataBody
         }
 
         consola.log(RequestBody, typeof RequestBody)
 
-        const response = await fetch(`${API_URL}/v1/school`, {
+        const response = await fetch(`${API_URL}/v1/school/${id}/userdatas/${grade}/${classNumber}/${monthIndex}`, {
             method: "PATCH",
             mode: "cors",
             headers: {
@@ -220,7 +215,6 @@ export default function DashboardTimeLineEdit({ params: { id, grade, classNumber
                                             {
                                                 name: e.target.value,
                                                 place: "初期値",
-                                                homework: [],
                                                 IsEvent: false
                                             }
                                         )

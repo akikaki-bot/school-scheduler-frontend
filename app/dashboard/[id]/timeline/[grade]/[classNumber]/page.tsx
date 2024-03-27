@@ -12,12 +12,16 @@ import { useEffect, useState } from "react"
 import { ErrorMessageComponent } from "@/components/errorMessage";
 import { Warning } from "@/components/warning";
 import { GridChildren } from "@/components/mainLayout";
+import { useClass } from "@/hooks/useClass";
 
 export default function DashboardTimeLine({ params: { id, grade, classNumber } }: { params: { id: string, grade: string, classNumber: string } }) {
 
-    const { data, user } = useSchool(id)
+    //const { data, user } = useSchool(id)
     const router = useRouter()
     const [isOpen, Open] = useState(false)
+
+    const { data, user } = useClass(id, grade, classNumber)
+
 
     const [monthIndex, setMonthIndex] = useState<Dates>("mon")
     const [monthIndexWeek, setMonthIndexWeek] = useState<Dates>("mon")
@@ -35,7 +39,7 @@ export default function DashboardTimeLine({ params: { id, grade, classNumber } }
     }, [typeof err === "string"])
 
     useEffect(() => {
-        const gradeData = data?.userDatas.find((datas) => datas.grade === +grade && datas.class === +classNumber)
+        const gradeData = data
         if (!gradeData) return;
         setSchoolData(gradeData)
     }, [data])
@@ -81,15 +85,15 @@ export default function DashboardTimeLine({ params: { id, grade, classNumber } }
     }
 
     async function SetOpenChange() {
-        const classData = data?.userDatas.find((data) => data.class == +classNumber && data.grade == +grade)
-        if (typeof classData === "undefined") return;
+        const classData = data
+        if (typeof classData === "undefined" || classData === null) return;
         if (typeof classData.defaultTimelineIndex === "undefined") return Open(isOpen ? false : true)
         else router.push(`${classNumber}/${monthIndex}/defaultTimeline/edit`)
     }
 
     async function SetOpenChangeTimeline() {
-        const classData = data?.userDatas.find((data) => data.class == +classNumber && data.grade == +grade)
-        if (typeof classData === "undefined") return;
+        const classData = data
+        if (typeof classData === "undefined" || classData === null) return;
         if (typeof classData.defaultTimelineIndex === "undefined") return Open(isOpen ? false : true)
         else router.push(`${classNumber}/${monthIndexWeek}/timeline/edit`)
     }
@@ -157,9 +161,9 @@ export default function DashboardTimeLine({ params: { id, grade, classNumber } }
                                 )
                                 :
                                 (
-                                    typeof data?.details.defaultTimelineIndex !== "undefined" ?
+                                    typeof data?.defaultTimelineIndex !== "undefined" ?
                                         (
-                                            new Array(+data?.details.defaultTimelineIndex).fill(0).map((_, index1) => (
+                                            new Array(+data?.defaultTimelineIndex).fill(0).map((_, index1) => (
                                                 <tr key={index1 + 122}>
                                                     <td key={index1 + 1231} className="border border-slate-300 text-center py-3"> {index1 + 1}時間目 </td>
                                                     <td key={index1} className="border font-semibold border-slate-300 text-gray-600 text-center py-3"> データがありません </td>
@@ -237,9 +241,9 @@ export default function DashboardTimeLine({ params: { id, grade, classNumber } }
                                     )
                                     :
                                     (
-                                        typeof data?.details.defaultTimelineIndex !== "undefined" ?
+                                        typeof data?.defaultTimelineIndex !== "undefined" ?
                                             (
-                                                new Array(+data?.details.defaultTimelineIndex).fill(0).map((_, index1) => (
+                                                new Array(+data?.defaultTimelineIndex).fill(0).map((_, index1) => (
                                                     <tr key={index1 + 122}>
                                                         <td key={index1 + 1231} className="border border-slate-300 text-center py-3"> {index1 + 1}時間目 </td>
                                                         <td key={index1} className="border font-semibold border-slate-300 text-gray-600 text-center py-3"> データがありません </td>

@@ -47,7 +47,7 @@ export async function GET(
     })
 
     if(!APIResponse.ok) {
-        return NextResponse.json({"HSS_BACKGROUNDAPI_ERROR" : APIResponse.status })
+        return NextResponse.json({"HSS_BACKGROUNDAPI_ERROR" : APIResponse.status, "HSS_BACKGROUNDAPI_MESSAGE" : APIResponse.statusText , "HSS_BACKGROUNDAPI_BODY" : await APIResponse.text()})
     }
 
     const HSSAPI_response = await APIResponse.json();
