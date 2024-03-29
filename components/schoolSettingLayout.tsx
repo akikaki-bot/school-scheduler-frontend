@@ -26,7 +26,7 @@ export function SchoolSettingLayout({ data }: { data: BaseScheme | null }) {
 
     if (data === null) return (<></>)
 
-    async function ResolveId( id : number | null ){
+    async function ResolveId( id : string | number | null ){
         if( id === null ) return;
 
         const token = sessionStorage.getItem('user');
