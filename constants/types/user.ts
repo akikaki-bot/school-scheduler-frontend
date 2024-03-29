@@ -170,7 +170,7 @@ export interface InviteData {
 
 export interface timelineDataChangeRequest {
     key: "timelineData",
-    value: Subjects[] | Subjects
+    value: Subjects[] | Subjects | null
     state: "add" | "remove" | "update"
     index?: number,
 }
