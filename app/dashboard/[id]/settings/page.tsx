@@ -49,7 +49,7 @@ export default function DashboardTimeLine({ params: { id } }: { params: { id: st
         </SidebarComopnent>
     )
 
-    async function ResolveId(id: number | null) {
+    async function ResolveId(id: string | number | null) {
         if (id === null) return null
         const token = sessionStorage.getItem('user');
         const response = await fetch(`${API_URL}/v1/users/${id}`, {
