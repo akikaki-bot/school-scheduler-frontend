@@ -102,7 +102,7 @@ export default function User() {
         if(!response.ok) return;
 
         if(applications !== null) {
-            const deleted = applications.filter( ( val ) => val?.hid !== Number(deleteApplicationId) )
+            const deleted = applications.filter( ( val ) => +(val?.hid ?? "0") !== Number(deleteApplicationId) )
             setApplications(deleted)
         }
 
