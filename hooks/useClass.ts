@@ -24,7 +24,7 @@ export function useClass( id : string , grade : string , classNumber : string ){
     useEffect(() => {
         ( async () => {
             if( !isRan ){
-                const session = sessionStorage
+                const session = localStorage
                 const logined = session.getItem('user')
                 if (typeof logined === "undefined" || logined === null) return loginForward( location , router )
                 await GetClassData( id , grade , classNumber )
@@ -47,7 +47,7 @@ export function useClass( id : string , grade : string , classNumber : string ){
             mode: "cors",
             headers : {
                 "Content-Type": "application/json",
-                "Authorization" : `Bearer ${sessionStorage.getItem('user')}`
+                "Authorization" : `Bearer ${localStorage.getItem('user')}`
             },
             credentials: "same-origin"
         });

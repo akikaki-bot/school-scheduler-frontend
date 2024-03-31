@@ -51,7 +51,7 @@ export default function DashboardTimeLine({ params: { id } }: { params: { id: st
 
     async function ResolveId(id: string | number | null) {
         if (id === null) return null
-        const token = sessionStorage.getItem('user');
+        const token = localStorage.getItem('user');
         const response = await fetch(`${API_URL}/v1/users/${id}`, {
             method: "GET",
             mode: "cors",
@@ -73,7 +73,7 @@ export default function DashboardTimeLine({ params: { id } }: { params: { id: st
             mode: "cors",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${sessionStorage.getItem('user')}`
+                "Authorization": `Bearer ${localStorage.getItem('user')}`
             },
             credentials: "same-origin"
         });
@@ -88,7 +88,7 @@ export default function DashboardTimeLine({ params: { id } }: { params: { id: st
             mode: "cors",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${sessionStorage.getItem('user')}`
+                "Authorization": `Bearer ${localStorage.getItem('user')}`
             },
             credentials: "same-origin"
         });
@@ -103,7 +103,7 @@ export default function DashboardTimeLine({ params: { id } }: { params: { id: st
             mode: "cors",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${sessionStorage.getItem('user')}`
+                "Authorization": `Bearer ${localStorage.getItem('user')}`
             },
             credentials: "same-origin",
             body : JSON.stringify({
@@ -125,7 +125,7 @@ export default function DashboardTimeLine({ params: { id } }: { params: { id: st
             mode: "cors",
             headers : {
                 "Content-Type": "application/json",
-                "Authorization" : `Bearer ${sessionStorage.getItem('user')}`
+                "Authorization" : `Bearer ${localStorage.getItem('user')}`
             },
             credentials: "same-origin"
         });

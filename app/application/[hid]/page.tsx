@@ -27,7 +27,7 @@ export default function ApplicationAuthorization({ params: { hid } }: { params: 
     const router = useRouter();
 
     useEffect(() => {
-        if(sessionStorage.getItem('user') === null) return loginForward(location, router)
+        if(localStorage.getItem('user') === null) return loginForward(location, router)
         getUserMenu()
         checkBotUser();
     }, [])
@@ -55,7 +55,7 @@ export default function ApplicationAuthorization({ params: { hid } }: { params: 
             mode: "cors",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${sessionStorage.getItem('user')}`
+                "Authorization": `Bearer ${localStorage.getItem('user')}`
             },
             credentials: "same-origin",
             body: JSON.stringify({
@@ -68,13 +68,13 @@ export default function ApplicationAuthorization({ params: { hid } }: { params: 
     }
 
     async function getUserMenu() {
-        const token = sessionStorage.getItem('user');
+        const token = localStorage.getItem('user');
         const response = await fetch(`${API_URL}/v1/permission`, {
             method : "GET",
             mode: "cors",
             headers : {
                 "Content-Type": "application/json",
-                "Authorization" : `Bearer ${sessionStorage.getItem('user')}`
+                "Authorization" : `Bearer ${localStorage.getItem('user')}`
             },
             credentials: "same-origin"
         })
@@ -101,7 +101,7 @@ export default function ApplicationAuthorization({ params: { hid } }: { params: 
             mode: "cors",
             headers : {
                 "Content-Type": "application/json",
-                "Authorization" : `Bearer ${sessionStorage.getItem('user')}`
+                "Authorization" : `Bearer ${localStorage.getItem('user')}`
             },
             credentials: "same-origin"
         })
@@ -115,7 +115,7 @@ export default function ApplicationAuthorization({ params: { hid } }: { params: 
             mode: "cors",
             headers : {
                 "Content-Type": "application/json",
-                "Authorization" : `Bearer ${sessionStorage.getItem('user')}`
+                "Authorization" : `Bearer ${localStorage.getItem('user')}`
             },
             credentials: "same-origin",
         })

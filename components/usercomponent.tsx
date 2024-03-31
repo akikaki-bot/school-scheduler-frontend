@@ -17,13 +17,13 @@ export function UserComponent({ user }: { user: User }) {
 
     async function getUserMenu() {
 
-        const token = sessionStorage.getItem('user');
+        const token = localStorage.getItem('user');
         const response = await fetch(`${API_URL}/v1/permission`, {
             method : "GET",
             mode: "cors",
             headers : {
                 "Content-Type": "application/json",
-                "Authorization" : `Bearer ${sessionStorage.getItem('user')}`
+                "Authorization" : `Bearer ${localStorage.getItem('user')}`
             },
             credentials: "same-origin"
         })
@@ -37,13 +37,13 @@ export function UserComponent({ user }: { user: User }) {
     }
 
     async function getSchoolInfo( id : string ){
-        const token = sessionStorage.getItem('user');
+        const token = localStorage.getItem('user');
         const response = await fetch(`${API_URL}/v1/school/${id}`, {
             method : "GET",
             mode: "cors",
             headers : {
                 "Content-Type": "application/json",
-                "Authorization" : `Bearer ${sessionStorage.getItem('user')}`
+                "Authorization" : `Bearer ${localStorage.getItem('user')}`
             },
             credentials: "same-origin"
         })

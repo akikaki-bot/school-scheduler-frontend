@@ -29,7 +29,7 @@ export function SchoolSettingLayout({ data }: { data: BaseScheme | null }) {
     async function ResolveId( id : string | number | null ){
         if( id === null ) return;
 
-        const token = sessionStorage.getItem('user');
+        const token = localStorage.getItem('user');
         const response = await fetch(`${API_URL}/v1/users/${id}`, {
             method : "GET",
             mode: "cors",

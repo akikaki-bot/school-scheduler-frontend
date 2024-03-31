@@ -53,10 +53,10 @@ export default function User() {
         </GridMainLayout>
     )
 
-    //if( !globalThis.sessionStorage instanceof globalThis.Storage) return alert('GlobalなSessionStorageが使用できません。')
+    //if( !globalThis.localStorage instanceof globalThis.Storage) return alert('GlobalなlocalStorageが使用できません。')
 
     useEffect(() => {
-        if (sessionStorage.getItem('user') === null) return router.push("/dashboard")
+        if (localStorage.getItem('user') === null) return router.push("/dashboard")
         getApplications();
 
         const interval = setInterval(() => {
@@ -69,7 +69,7 @@ export default function User() {
     }, [])
 
     function copyToken() {
-        navigator.clipboard.writeText(sessionStorage.getItem('user') ?? "").then(
+        navigator.clipboard.writeText(localStorage.getItem('user') ?? "").then(
             () => {
 
             },
@@ -89,7 +89,7 @@ export default function User() {
             mode: "cors",
             headers : {
                 "Content-Type": "application/json",
-                "Authorization" : `Bearer ${sessionStorage.getItem('user')}`
+                "Authorization" : `Bearer ${localStorage.getItem('user')}`
             },
             credentials: "same-origin",
             body : JSON.stringify({
@@ -116,7 +116,7 @@ export default function User() {
             mode: "cors",
             headers : {
                 "Content-Type": "application/json",
-                "Authorization" : `Bearer ${sessionStorage.getItem('user')}`
+                "Authorization" : `Bearer ${localStorage.getItem('user')}`
             },
             credentials: "same-origin",
             body : JSON.stringify({
@@ -142,7 +142,7 @@ export default function User() {
             mode: "cors",
             headers : {
                 "Content-Type": "application/json",
-                "Authorization" : `Bearer ${sessionStorage.getItem('user')}`
+                "Authorization" : `Bearer ${localStorage.getItem('user')}`
             },
             credentials: "same-origin"
         });
@@ -168,7 +168,7 @@ export default function User() {
             mode: "cors",
             headers : {
                 "Content-Type": "application/json",
-                "Authorization" : `Bearer ${sessionStorage.getItem('user')}`
+                "Authorization" : `Bearer ${localStorage.getItem('user')}`
             },
             credentials: "same-origin",
             body : JSON.stringify({
@@ -197,7 +197,7 @@ export default function User() {
             mode: "cors",
             headers : {
                 "Content-Type": "application/json",
-                "Authorization" : `Bearer ${sessionStorage.getItem('user')}`
+                "Authorization" : `Bearer ${localStorage.getItem('user')}`
             },
             credentials: "same-origin"
         })
@@ -209,7 +209,7 @@ export default function User() {
         }
 
         const data = await response.json() as { body : { token : string } }
-        sessionStorage.setItem('user', data.body.token);
+        localStorage.setItem('user', data.body.token);
     }
 
     async function resolveApplication ( id : string ) {
@@ -218,7 +218,7 @@ export default function User() {
             mode: "cors",
             headers : {
                 "Content-Type": "application/json",
-                "Authorization" : `Bearer ${sessionStorage.getItem('user')}`
+                "Authorization" : `Bearer ${localStorage.getItem('user')}`
             },
             credentials: "same-origin"
         });
@@ -243,7 +243,7 @@ export default function User() {
                 </Content>
                 <Title title={`アクセストークン (高度な設定)`} />
                 <Content>
-                    <code> {displayAccessToken ? sessionStorage.getItem('user') : "SuP3r_S3CretAcCe2ST0k3n"} </code>
+                    <code> {displayAccessToken ? localStorage.getItem('user') : "SuP3r_S3CretAcCe2ST0k3n"} </code>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:w-1/2">
                         <Button color="warning" onPress={() => setDisplayState(displayAccessToken ? false : true)}>アクセストークンを{displayAccessToken ? "隠す" : "表示する"}</Button>
                         {displayAccessToken && <Button color="primary" onPress={() => copyToken()}>コピーする</Button>}

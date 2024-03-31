@@ -22,7 +22,7 @@ export default function DashboardAdd() {
 
 
     useEffect(() => {
-        const session = sessionStorage
+        const session = localStorage
         const logined = session.getItem('user')
         if (typeof logined === "undefined" || logined === null) return loginForward( location , router )
         InitUser({ t: logined })
@@ -66,7 +66,7 @@ export default function DashboardAdd() {
             mode: "cors",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${sessionStorage.getItem('user')}`
+                "Authorization": `Bearer ${localStorage.getItem('user')}`
             },
             credentials: "same-origin",
             body: JSON.stringify({

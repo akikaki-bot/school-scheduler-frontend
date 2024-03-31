@@ -26,13 +26,13 @@ export default function InviteUser({ params: { uuid } }: { params: { uuid: strin
     }, [])
 
     async function InviteGet() {
-        if (sessionStorage.getItem('user') == null) return loginForward(location, router)
+        if (localStorage.getItem('user') == null) return loginForward(location, router)
         const response = await fetch(`${API_URL}/v1/school/invite`, {
             method: "POST",
             mode: "cors",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${sessionStorage.getItem('user')}`
+                "Authorization": `Bearer ${localStorage.getItem('user')}`
             },
             credentials: "same-origin",
             body: JSON.stringify({
@@ -52,7 +52,7 @@ export default function InviteUser({ params: { uuid } }: { params: { uuid: strin
             mode: "cors",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${sessionStorage.getItem('user')}`
+                "Authorization": `Bearer ${localStorage.getItem('user')}`
             },
             credentials: "same-origin",
             body: JSON.stringify({

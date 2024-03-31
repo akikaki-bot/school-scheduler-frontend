@@ -74,7 +74,7 @@ export default function DashboardTimeLine({ params: { id } }: { params: { id: st
             mode: "cors",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${sessionStorage.getItem('user')}`
+                "Authorization": `Bearer ${localStorage.getItem('user')}`
             },
             credentials: "same-origin",
             body: JSON.stringify(DataPut)

@@ -17,7 +17,7 @@ export default function S() {
     useEffect(() => {
         const token = searchParams.get(`t`);
         if (token === null) return;
-        sessionStorage.setItem('user', token);
+        localStorage.setItem('user', token);
         const location = localStorage.getItem('state');
         if (location === null) return router.push('/dashboard');
         localStorage.removeItem('state');

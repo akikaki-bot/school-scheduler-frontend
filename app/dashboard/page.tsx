@@ -25,7 +25,7 @@ export default function Dashboard() {
     const router = useRouter()
 
     useEffect(() => {
-        const session = sessionStorage
+        const session = localStorage
         const logined = session.getItem('user')
         if (typeof logined === "undefined" || logined === null) return changeLoginForm(true)
         InitUser({ t: logined })
@@ -49,7 +49,7 @@ export default function Dashboard() {
         })
         if (!response.ok) {
             setErr(`${response.statusText} - 再度ログインしてください。`);
-            sessionStorage.removeItem('user');
+            localStorage.removeItem('user');
             changeLoginForm(true);
             return;
         }

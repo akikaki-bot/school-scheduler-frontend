@@ -19,7 +19,7 @@ export function useUser( id : string = "@me" ) {
     }, [ ])
 
     async function ResolveId(){
-        const token = sessionStorage.getItem('user');
+        const token = localStorage.getItem('user');
         if( typeof token === "undefined" || token === null) return;
         const response = await fetch(`${API_URL}/v1/users/${id}`, {
             method : "GET",

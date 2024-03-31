@@ -179,7 +179,7 @@ export default function DashboardTimeLineEdit({ params: { id, grade, classNumber
             mode: "cors",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${sessionStorage.getItem('user')}`
+                "Authorization": `Bearer ${localStorage.getItem('user')}`
             },
             credentials: "same-origin",
             body: JSON.stringify(RequestBody)
