@@ -21,6 +21,10 @@ export function useClass( id : string , grade : string , classNumber : string ){
         isRan  , setRun
     ] = useState(false)
 
+    async function updateData(){
+        GetClassData( id , grade , classNumber );
+    }
+
     useEffect(() => {
         ( async () => {
             if( !isRan ){
@@ -62,12 +66,14 @@ export function useClass( id : string , grade : string , classNumber : string ){
     if( typeof data === "object" && typeof user === "object") {
         return {
             data,
-            user
+            user,
+            updateData
         }
     } else {
         return {
             data,
-            user
+            user,
+            updateData
         }
     }
 }

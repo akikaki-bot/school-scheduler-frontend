@@ -86,10 +86,6 @@ export default function DashboardTimeLine({ params: { id } }: { params: { id: st
     return (
         <SidebarComopnent sid={id}>
             <ErrorMessageComponent err={err} />
-            <Title title="標準時間割の設定" />
-            <Content>
-                <h1 className="py-2"> 標準時間割（変更等ない状態）の設定が出来ます。 </h1>
-            </Content>
             <Title title="クラス選択" />
             <Content className="flex justify-center">
                 <AutoModifyGrid isSidebarComponent>
