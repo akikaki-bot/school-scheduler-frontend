@@ -30,6 +30,7 @@ export default function User() {
     const [ isTokenMenuOpen , OpenTokenMenu ] = useState(false)
 
     const [ isDeleteMenuOpen , OpenDeleteMenu ] = useState(false)
+    const [ isRegenerateMenuOpen , OpenRegenerateMenu ] = useState(false)
 
     
     // TEMPOLARY STATE
@@ -234,11 +235,15 @@ export default function User() {
                 <ErrorMessageComponent err={err} />
                 <Title title={`ログイン中のユーザー`} />
                 <Content>
-                    <Card className="sm:w-1/2">
+                    <Card className="sm:w-1/2 gap-2 p-1">
                         <CardBody>
                             <p className="text-2xl">{user.data?.username} </p>
                             <p> <CanCopyBlock value={user.data?.hid ?? 0} /> / {user.data?.discordAccount && "Discordアカウント連携✅"}</p>
                         </CardBody>
+                        <div className="flex w-full gap-2">
+                            <Button className="py-2" color="danger" onPress={() => { localStorage.removeItem('user'); router.push('/')}}> ログアウトする </Button>
+                            <Button className="py-2" color="warning" onPress={() => { localStorage.removeItem('user'); router.push('/v1/api/login')}}> ログインしなおす </Button>
+                        </div>
                     </Card>
                 </Content>
                 <Title title={`アクセストークン (高度な設定)`} />
@@ -247,7 +252,7 @@ export default function User() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:w-1/2">
                         <Button color="warning" onPress={() => setDisplayState(displayAccessToken ? false : true)}>アクセストークンを{displayAccessToken ? "隠す" : "表示する"}</Button>
                         {displayAccessToken && <Button color="primary" onPress={() => copyToken()}>コピーする</Button>}
-                        <Button color="danger" onPress={() => regenerateUserToken()}> 再生成する </Button>
+                        <Button color="danger" onPress={() => OpenRegenerateMenu(isRegenerateMenuOpen ? false : true )}> 再生成する </Button>
                     </div>
                 </Content>
                 <Title title={`APIアプリケーション`} />
@@ -330,6 +335,28 @@ export default function User() {
                                         </ModalBody>
                                         <ModalFooter>
                                             <Button color="danger" onClick={() => deleteApplication()}> 削除 </Button>
+                                        </ModalFooter>
+                                    </>
+                                )
+                            }
+                        </ModalContent>
+                    </Modal>
+                    <Modal
+                        isOpen={isRegenerateMenuOpen}
+                        onOpenChange={OpenRegenerateMenu}
+                        placement="center"
+                    >
+                        <ModalContent>
+                            {
+                                (onClose) => (
+                                    <>
+                                        <ModalHeader> トークンの再生成 </ModalHeader>
+                                        <ModalBody>
+                                            <p> トークンを再生成すると、あなたのゆーざートークンで製作しているアプリ等に影響が出る可能性があります。 </p>
+                                            <p> 本当によろしいですか？</p>
+                                        </ModalBody>
+                                        <ModalFooter>
+                                            <Button color="danger" onClick={() => regenerateUserToken()}> 再生成する </Button>
                                         </ModalFooter>
                                     </>
                                 )

@@ -30,6 +30,8 @@ export default function DashboardTimeLine({ params: { id } }: { params: { id: st
     const { isOpen : _deleteIsOpen, onOpen : _deleteonOpen, onOpenChange : _deleteonOpenChange } = useDisclosure();
     const { isOpen : schoolDeleteState, onOpen : schoolDeleteOnOpen, onOpenChange : schoolDeleteonOpenChange } = useDisclosure();
 
+    const [ isLoading , setLoading ] = useState( true )
+
 
 
     useEffect(() => {
@@ -39,8 +41,8 @@ export default function DashboardTimeLine({ params: { id } }: { params: { id: st
             setAdmins(users)
             setOwner(await ResolveId(data.details.ownerId))
             loginUser?.hid === data.details.ownerId && await generateInviteCode()
+            setLoading(false)
         })()
-
     }, [data])
 
     if (data === null) return (
@@ -147,7 +149,13 @@ export default function DashboardTimeLine({ params: { id } }: { params: { id: st
                             <UserBox isBot={typeof user?.isBot !== "undefined" && user?.isBot} key={index} user={user} IsOwner={user?.hid == owner?.hid} onPress={() => { setDeleteId( String(user?.hid ?? data.details.admins[index]) ); _deleteonOpen();}} />
                         ))
                     }
-                    {loginUser?.hid == owner?.hid && <Button color="primary" onPress={() => onOpen()}> <LinkIcon /> 新しく共同管理者を招待する </Button>}
+                    <Warning className="text-xl">
+                        お知らせ：ユーザーが正しく表示されない問題について <br />
+                        もし追加されたユーザー・もしくは自分自身が [不明なユーザー] 扱いとなっている場合は、<br />
+                        再度ログインをお願いします。それでも解決しない場合は、運営にお問い合わせください。<br />
+                        お手数をおかけいたしますが、よろしくお願いいたします。
+                    </Warning>
+                    {loginUser?.hid == owner?.hid && <Button color="primary" onPress={() => { onOpen(); generateInviteCode(); }} disabled={isLoading}> <LinkIcon /> 新しく共同管理者を招待する </Button>}
                     <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
                         <ModalContent>
                             {(onClose) => (
@@ -161,7 +169,7 @@ export default function DashboardTimeLine({ params: { id } }: { params: { id: st
                                         </p>
                                         <p>
                                             <strong className="text-xl">招待リンク</strong><br />
-                                            <CanCopyBlock value={`${location.protocol}//${location.hostname}:${location.port}/invite/${inviteCode}`} />
+                                            <CanCopyBlock value={`${location.protocol}//${location.hostname}/invite/${inviteCode}`} />
                                         </p>
                                         <p>
                                             <strong className="text-xl">招待リンク再発行</strong><br />
