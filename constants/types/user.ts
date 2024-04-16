@@ -207,6 +207,7 @@ export interface User extends BaseUser {
     developer : boolean
     developerInfo ?: DeveloperSetting
     isBot : boolean
+    serverAdmin ?: boolean
 }
 
 export interface BotUser extends User {

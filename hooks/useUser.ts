@@ -10,12 +10,16 @@ export function useUser( id : string = "@me" ) {
     const [ data , setOwner ] = useState<User | null>( null )
 
     useEffect(() => {
-        setInterval(async () => {
+        const interval = setInterval(async () => {
             await ResolveId( )
         }, 1000 * 60 * 1);
         (async () => {
             await ResolveId( )
         })()
+
+        return () => {
+            clearInterval( interval );
+        }
     }, [ ])
 
     async function ResolveId(){
