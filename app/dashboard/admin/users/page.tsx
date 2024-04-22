@@ -101,22 +101,23 @@ export default function DashboardAdminPage() {
                         <tbody>
                             {
                                 userList.map((user, index) => {
+                                    if( user === null ) return;
                                     if( filter === "user" && user.isBot ) return;
                                     if( filter === "bot" && !user.isBot ) return;
                                     return (
                                     <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                         <th scope="row" className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
                                             <div className="ps-3">
-                                                <div className="text-base font-semibold">{ user.username }</div>
+                                                <div className="text-base font-semibold">{ user?.username ?? "null" }</div>
                                                 {showEmail && ( <div className="font-normal text-gray-200">{ user.email }</div> )}
                                             </div>  
                                         </th>
                                         <td className="px-6 py-4">
-                                            {user.isBot ? "🤖 Bot" : user.serverAdmin ? "👑 Admin" : "👤 User"}
+                                            {user?.isBot ? "🤖 Bot" : user.serverAdmin ? "👑 Admin" : "👤 User"}
                                         </td>
                                         <td className="px-6 py-4">
                                             <div className="flex items-center">
-                                                <div className={`h-2.5 w-2.5 rounded-full ${user.discordAccount ? "bg-green-500" : "bg-red-500"} me-2`}></div> DA {user.discordAccount ? "" : "not"} Link{user.discordAccount ? "ed" : ""}
+                                                <div className={`h-2.5 w-2.5 rounded-full ${user?.discordAccount ? "bg-green-500" : "bg-red-500"} me-2`}></div> DA {user.discordAccount ? "" : "not"} Link{user.discordAccount ? "ed" : ""}
                                             </div>
                                         </td>
                                         <td className="px-6 py-4">

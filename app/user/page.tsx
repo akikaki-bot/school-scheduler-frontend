@@ -6,13 +6,15 @@ import { AutoModifyGrid } from "@/components/grid-cols-auto";
 import { Loading } from "@/components/loading";
 import { GridChildren, GridMainLayout } from "@/components/mainLayout";
 import { Title } from "@/components/title";
+import { Warning } from "@/components/warning";
+import { VerifyStaffs } from "@/constants/serverAdminList";
 import { API_URL } from "@/constants/setting";
 import { BotUser } from "@/constants/types/user";
 import { useUser } from "@/hooks/useUser";
 import { Button, Card, CardBody, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/react";
 import { on } from "events";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 
 
 
@@ -46,6 +48,8 @@ export default function User() {
 
     const [applications, setApplications] = useState<(BotUser | null)[] | null>( null )
 
+    const [ isV2token , setisV2token ] = useState<boolean>(false)
+
     if (user === null) return (
         <GridMainLayout>
             <GridChildren paddingX={12}>
@@ -62,12 +66,17 @@ export default function User() {
 
         const interval = setInterval(() => {
             getApplications();
+            isV2tokenInit();
         }, 3000)
 
         return () => {
             clearInterval(interval)
         }
     }, [])
+
+    useEffect(() => {
+        console.log( applications );
+    }, [applications])
 
     function copyToken() {
         navigator.clipboard.writeText(localStorage.getItem('user') ?? "").then(
@@ -152,7 +161,7 @@ export default function User() {
         const responseJSON = await response.json() as { body : { applications : string[] } };
         const applications = await Promise.all(
             responseJSON.body.applications.map( async (id) => 
-                resolveApplication(id)
+                await resolveApplication(id)
             )
         )
         setApplications(applications)
@@ -211,6 +220,7 @@ export default function User() {
 
         const data = await response.json() as { body : { token : string } }
         localStorage.setItem('user', data.body.token);
+        OpenRegenerateMenu( false )
     }
 
     async function resolveApplication ( id : string ) {
@@ -229,25 +239,51 @@ export default function User() {
         return responseJSON.body.data
     }
 
+    function isV2tokenInit(){ 
+        setisV2token(
+            ( localStorage.getItem('user')?.substring( ( localStorage.getItem('user')?.length ?? 0 ) - 2 ) === "v2" )
+        )
+    }
+
     return (
         <GridMainLayout>
             <GridChildren paddingX={12} paddingY={12} IsHeightFull>
                 <ErrorMessageComponent err={err} />
-                <Title title={`ログイン中のユーザー`} />
+                <Title title={`ユーザーページ`} />
                 <Content>
                     <Card className="sm:w-1/2 gap-2 p-1">
                         <CardBody>
-                            <p className="text-2xl">{user.data?.username} </p>
-                            <p> <CanCopyBlock value={user.data?.hid ?? 0} /> / {user.data?.discordAccount && "Discordアカウント連携✅"}</p>
+                            <div className="ps-1">
+                                <div className="text-2xl font-semibold">{user.data?.username}</div>
+                                <div className="font-normal text-gray-100">{ user.data?.email }</div>
+                            </div>
+                            <div className="ps-1"> <CanCopyBlock value={user.data?.hid ?? 0} /> </div>
+                            <div className="flex items-center ps-1">
+                                { user.data?.developer && <p title="あなたは究極なデベロッパー！">📎</p> }
+                                { user.data?.serverAdmin && <p title="さいきょーの管理者">👑</p> }
+                                { user.data?.discordAccount && <p title="Discordアカウントと紐づけされてる！">🐽</p> }
+                                { user.data?.isBot && <p title="え、なんでこれ見れてるの？意思があるロボット...？">🤖</p> }
+                                { isV2token && <p title="v2ユーザー！つよそう！">💎</p> }
+                                { VerifyStaffs.includes( user.data?.hid ?? "0" ) && <p title="HSSスタッフ">💠</p> }
+                            </div>
                         </CardBody>
-                        <div className="flex w-full gap-2">
-                            <Button className="py-2" color="danger" onPress={() => { localStorage.removeItem('user'); router.push('/')}}> ログアウトする </Button>
-                            <Button className="py-2" color="warning" onPress={() => { localStorage.removeItem('user'); router.push('/v1/api/login')}}> ログインしなおす </Button>
-                        </div>
                     </Card>
                 </Content>
-                <Title title={`アクセストークン (高度な設定)`} />
+                <Content className="py-2">
+                    <div className="flex w-full gap-2">
+                            <Button className="py-2" color="danger" onPress={() => { localStorage.removeItem('user'); router.push('/')}}> ログアウトする </Button>
+                            <Button className="py-2" color="warning" onPress={() => { localStorage.removeItem('user'); router.push('/api/v1/login')}}> ログインしなおす </Button>
+                    </div>
+                </Content>
+                <Title title={`アクセストークン (${!isV2token ? "!!!" : "高度な設定"})`} />
                 <Content>
+                    {/*!isV2token && (
+                        <Warning className="text-xl">
+                            利用者の方へ：アクセストークンは只今、v2にアップデートされています。
+                            アクセストークンをv2にすることで様々なユーザー向け利用を利用することができるようになりますので、
+                            お早めにアクセストークンを再生成をお願いします。
+                        </Warning>
+                    )*/}
                     <code> {displayAccessToken ? localStorage.getItem('user') : "SuP3r_S3CretAcCe2ST0k3n"} </code>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:w-1/2">
                         <Button color="warning" onPress={() => setDisplayState(displayAccessToken ? false : true)}>アクセストークンを{displayAccessToken ? "隠す" : "表示する"}</Button>
@@ -260,8 +296,7 @@ export default function User() {
                     <Title title={`作成済みのアプリケーション`} />
                     <AutoModifyGrid>
                     {
-                        applications === null ? (<Loading /> ) :
-                        applications.map( ( app , index ) => (
+                        applications !== null && applications.map( ( app , index ) => (
                             <Card key={index}>
                                 <CardBody>
                                     <p className="text-2xl">{app?.username ?? "不明なアプリケーション"} ({app?.hid})</p>

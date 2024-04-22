@@ -61,7 +61,7 @@ export function NavigationBar() {
                 } 
             </NavbarContent>
             <NavbarContent justify="end">
-                <Link href="/user"> { (isServerAdmin(data?.serverAdmin) ? "👑" : "")+data?.username ?? "ログインしていません"} </Link>
+                <Link href="/user"> { (isServerAdmin(data?.serverAdmin) ? "👑" : "")+(data?.username ?? "ログインしていません")} </Link>
                 <NavbarMenuToggle aria-label={Open ? "メニューを閉じる" : "メニューを開く"} />
             </NavbarContent>
             <NavbarMenu className="w-2/3 sm:w-1/2 lg:w-1/5 z-50 inset-x-auto float-right right-0 font-normal text-2xl border-l-2 border-l-yellow-100">
