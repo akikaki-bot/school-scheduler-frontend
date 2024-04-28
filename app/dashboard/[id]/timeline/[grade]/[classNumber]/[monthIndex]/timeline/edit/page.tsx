@@ -29,7 +29,7 @@ type Scheme = timelineDataChangeRequest;
 
 export default function DashboardTimeLineEdit({ params: { id, grade, classNumber, monthIndex } }: { params: { id: string, grade: string, classNumber: string, monthIndex: Dates } }) {
 
-    const { data, user } = useSchool(id)
+    const { data, user , runfunc : resetFunc} = useSchool(id)
     const [TimeLines, setTimeLines] = useState<Subjects[] | null>(null)
 
     const router = useRouter()
@@ -147,7 +147,7 @@ export default function DashboardTimeLineEdit({ params: { id, grade, classNumber
         const defaultTimelineIndex = data?.userDatas.find((data) => data.class === +classNumber && data.grade === +grade)?.defaultTimelineIndex
         const RequestBody : timelineDataChangeRequest[] = new Array(
             defaultTimelineIndex
-        ).map( ( _ , index ) => ({
+        ).fill(1).map( ( _ , index ) => ({
             key : "timelineData",
             state : "remove",
             index : index,

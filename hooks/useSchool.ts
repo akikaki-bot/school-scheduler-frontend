@@ -38,6 +38,10 @@ export function useSchool( id : string ) {
 
     }
 
+    async function runfunc() {
+        await GetSchoolData( id )
+    }
+
     async function GetSchoolData( id : string ){
         const response = await fetch(`${API_URL}/v1/school/${id}`, {
             method : "GET",
@@ -58,12 +62,14 @@ export function useSchool( id : string ) {
     if( typeof data === "object" && typeof user === "object") {
         return {
             data,
-            user
+            user,
+            runfunc
         }
     } else {
         return {
             data : null,
-            user : null
+            user : null,
+            runfunc
         }
     }
 }

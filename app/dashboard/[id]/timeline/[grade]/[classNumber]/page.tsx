@@ -20,7 +20,7 @@ export default function DashboardTimeLine({ params: { id, grade, classNumber } }
     const router = useRouter()
     const [isOpen, Open] = useState(false)
 
-    const { data, user } = useClass(id, grade, classNumber)
+    const { data, user , updateData} = useClass(id, grade, classNumber)
 
 
     const [monthIndex, setMonthIndex] = useState<Dates>("mon")
@@ -113,8 +113,10 @@ export default function DashboardTimeLine({ params: { id, grade, classNumber } }
                 grade: +grade
             })
         })
+        if( response.ok ) updateData();
         if (!response.ok) return setError(`エラーが発生しました。\nサーバーが無効な返答をしました : ${response.statusText}`);
         else return setResetState(false);
+        
     }
 
     return (
@@ -155,7 +157,7 @@ export default function DashboardTimeLine({ params: { id, grade, classNumber } }
                                 (
                                     <tr key={index1 + 1120}>
                                         <td key={index1 + 12212} className="border border-slate-300 text-center py-3"> {index1 + 1}時間目 </td>
-                                        <td key={index1} className="border border-slate-300 text-center py-3"> {data === null ? "不明" : data.name} </td>
+                                        <td key={index1} className="border border-slate-300 text-center py-3"> {data === null ? "データがありません" : data.name} </td>
                                     </tr>
                                 )
                                 )
@@ -235,7 +237,7 @@ export default function DashboardTimeLine({ params: { id, grade, classNumber } }
                                     (
                                         <tr key={index1 + 1120}>
                                             <td key={index1 + 12212} className="border border-slate-300 text-center py-3"> {index1 + 1}時間目 </td>
-                                            <td key={index1} className="border border-slate-300 text-center py-3"> {data === null ? "不明" : data.name} </td>
+                                            <td key={index1} className="border border-slate-300 text-center py-3"> {data === null ? "データがありません" : data.name} </td>
                                         </tr>
                                     )
                                     )

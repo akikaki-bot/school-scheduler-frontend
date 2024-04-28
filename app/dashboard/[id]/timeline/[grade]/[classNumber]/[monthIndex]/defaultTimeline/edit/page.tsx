@@ -157,7 +157,7 @@ export default function DashboardTimeLineEdit({ params: { id, grade, classNumber
         const defaultTimelineIndex = data?.userDatas.find((data) => data.class === +classNumber && data.grade === +grade)?.defaultTimelineIndex
         const RequestBody : defaultTimelineDataChangeRequest[] = new Array(
             defaultTimelineIndex
-        ).map( ( _ , index ) => ({
+        ).fill(0).map( ( _ , index ) => ({
             key : "defaultTimelineData",
             state : "remove",
             index : index,
