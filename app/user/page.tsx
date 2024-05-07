@@ -3,8 +3,10 @@ import { CanCopyBlock } from "@/components/canCopyBlock";
 import { Content } from "@/components/content";
 import { ErrorMessageComponent } from "@/components/errorMessage";
 import { AutoModifyGrid } from "@/components/grid-cols-auto";
+import { Infomation } from "@/components/infomation";
 import { Loading } from "@/components/loading";
 import { GridChildren, GridMainLayout } from "@/components/mainLayout";
+import { PopupBatch } from "@/components/popupBatch";
 import { Title } from "@/components/title";
 import { Warning } from "@/components/warning";
 import { VerifyStaffs } from "@/constants/serverAdminList";
@@ -255,16 +257,17 @@ export default function User() {
                         <CardBody>
                             <div className="ps-1">
                                 <div className="text-2xl font-semibold">{user.data?.username}</div>
-                                <div className="font-normal text-gray-100">{ user.data?.email }</div>
+                                <div className="font-normal text-gray-500">{ user.data?.email }</div>
                             </div>
                             <div className="ps-1"> <CanCopyBlock value={user.data?.hid ?? 0} /> </div>
                             <div className="flex items-center ps-1">
-                                { user.data?.developer && <p title="あなたは究極なデベロッパー！">📎</p> }
-                                { user.data?.serverAdmin && <p title="さいきょーの管理者">👑</p> }
-                                { user.data?.discordAccount && <p title="Discordアカウントと紐づけされてる！">🐽</p> }
-                                { user.data?.isBot && <p title="え、なんでこれ見れてるの？意思があるロボット...？">🤖</p> }
-                                { isV2token && <p title="v2ユーザー！つよそう！">💎</p> }
-                                { VerifyStaffs.includes( user.data?.hid ?? "0" ) && <p title="HSSスタッフ">💠</p> }
+                                { user.data?.developer && <PopupBatch title="あなたは究極なデベロッパー！" emoji="📎" description="あなたは究極なデベロッパーです。" /> }
+                                
+                                { user.data?.serverAdmin && <PopupBatch title="究極な管理者" emoji="👑" description="強そうな権限をあなたはもっています。" /> }
+                                { user.data?.discordAccount && <PopupBatch title="Discordアカウント連携" emoji="🐽" description="DiscordアカウントとHSSアカウントが紐づけされています。" /> }
+                                { user.data?.isBot && <PopupBatch title="You are bot" emoji="🤖" description="ｱﾚ ﾅﾝﾃﾞｱﾅﾀ ｺﾚｦﾐﾚﾃｲﾙ ﾝﾀﾞ" /> }
+                                { isV2token && <PopupBatch title="You are version 2" emoji="💎" description="バージョン２のユーザー！" /> }
+                                { VerifyStaffs.includes( user.data?.hid ?? "0" ) && <PopupBatch title="H（ハイパー）S（スーパー）S（スタップ）" emoji="💠" description="HSSのスタッフ？だよね？" /> }
                             </div>
                         </CardBody>
                     </Card>
@@ -284,7 +287,7 @@ export default function User() {
                             お早めにアクセストークンを再生成をお願いします。
                         </Warning>
                     )*/}
-                    <code> {displayAccessToken ? localStorage.getItem('user') : "SuP3r_S3CretAcCe2ST0k3n"} </code>
+                    <code> {displayAccessToken ? localStorage.getItem('user') : "アクセストークンはここに表示されます"} </code>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:w-1/2">
                         <Button color="warning" onPress={() => setDisplayState(displayAccessToken ? false : true)}>アクセストークンを{displayAccessToken ? "隠す" : "表示する"}</Button>
                         {displayAccessToken && <Button color="primary" onPress={() => copyToken()}>コピーする</Button>}
@@ -293,6 +296,11 @@ export default function User() {
                 </Content>
                 <Title title={`APIアプリケーション`} />
                 <Content>
+                    <Infomation className="text-xl">
+                        <h1 className="text-2xl font-semibold"> APIアプリケーションとは？ </h1>
+                        <p className="pb-2"> 詳しくはこちらのドキュメンテーションをご確認ください。</p>
+                        <Button color="primary" onPress={() => router.push('https://hss-dev-docs.aknet.tech/docs/faq/differents#%E3%82%A2%E3%83%97%E3%83%AA%E3%82%B1%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%E3%81%A8%E3%81%AE%E5%B7%AE%E3%81%A3%E3%81%A6')}> ドキュメンテーションを見る </Button>
+                    </Infomation>
                     <Title title={`作成済みのアプリケーション`} />
                     <AutoModifyGrid>
                     {

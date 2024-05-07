@@ -79,21 +79,15 @@ export function UserComponent({ user }: { user: User }) {
                     )
                 }
                 <Card className="py-4">
-                    <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
-                        <p className="text-tiny uppercase font-bold">管理者ページ</p>
-                        <h4 className="font-bold text-large">新規で追加する</h4>
-                    </CardHeader>
-                    <CardBody className="overflow-visible py-2 items-center">
-                        <Link href="/dashboard/add">
-                            <Image
-                                alt="Card background"
-                                className="object-cover rounded-xl"
-                                src="/logo.png"
-                                width={270}
-                                height={300}
-                            />
-                        </Link>
-                    </CardBody>
+                    <Link href="/dashboard/add">
+                        <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
+                            <p className="text-tiny uppercase font-bold">学校の登録</p>
+                            <h4 className="font-bold text-large">新規で追加する</h4>
+                        </CardHeader>
+                        <CardBody className="overflow-visible py-2 items-center">
+                            学校を新規で追加します。
+                        </CardBody>       
+                    </Link>
                 </Card>
             </div>
         </div>

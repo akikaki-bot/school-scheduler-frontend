@@ -36,6 +36,10 @@ export default function DashboardAdd() {
         setInvaild( false )
     }, [ school?.length && school.length < 20 ])
 
+    function backToHome() {
+        router.push("/dashboard")
+    }
+
     async function InitUser(u: { t: string }) {
         /** token */
         const t = u.t
@@ -91,10 +95,11 @@ export default function DashboardAdd() {
 
     return (
         <main className="flex min-h-screen flex-col p-12 sm:p-24 justify-center items-center">
-            <h1 className="text-5xl font-semibold"> モーダルウィンドウが開きます。 </h1>
+            <h1 className="text-5xl font-semibold"> （なにもないばしょ） </h1>
             <Modal
                 size="lg"
                 isOpen={true}
+                onClose={() => backToHome()}
             >
                 <ModalContent>
                     <>

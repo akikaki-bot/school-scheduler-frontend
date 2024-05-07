@@ -7,7 +7,8 @@ import { useState } from "react";
 
 type NavLink = {
     label : string,
-    href : string
+    href : string,
+    isAdminMenu ?: boolean
 }
 
 const NavLinkConstants : NavLink[] = [
@@ -33,6 +34,11 @@ const LinkConstants : NavLink[] = [
     {
         label : "ユーザー / User",
         href : "/user"
+    },
+    {
+        label : "管理者メニュー / Admin",
+        href : "/dashboard/admin",
+        isAdminMenu : true
     }
 ]
 
@@ -46,10 +52,12 @@ export function NavigationBar() {
     }
 
     return (
-        <Navbar>
+        <Navbar disableAnimation>
             <NavbarBrand>
                 {/*<Image className="rounded-full" src="/logo.png" height={36} width={36} alt="ロゴ" /> */}
-                <p className="font-bold text-inherit text-2xl px-3"><span className="text-amber-500">H</span><span className="text-amber-300">SS</span> Developers</p>
+                <Link href="/">
+                    <p className="font-bold text-inherit text-2xl px-3"><span className="text-amber-500">H</span><span className="text-amber-300">SS</span> Developers</p>
+                </Link>
             </NavbarBrand>
             <NavbarContent className="hidden sm:flex " justify="center">
                 {
@@ -67,6 +75,7 @@ export function NavigationBar() {
             <NavbarMenu className="w-2/3 sm:w-1/2 lg:w-1/5 z-50 inset-x-auto float-right right-0 font-normal text-2xl border-l-2 border-l-yellow-100">
                 {
                     LinkConstants.map((link, index) => (
+                        (link.isAdminMenu && !isServerAdmin(data?.serverAdmin)) ? null :
                         <NavbarMenuItem  key={`nav-top-${index}`}>
                             <Link color="foreground" href={`${link.href ?? "/"}`} onClick={() => OpenChange( false )}> {link.label} </Link>
                         </NavbarMenuItem >

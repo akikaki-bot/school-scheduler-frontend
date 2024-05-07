@@ -9,6 +9,8 @@ import { Button, Input } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useClass } from "@/hooks/useClass";
+import { Infomation } from "@/components/infomation";
+import { CanCopyBlock } from "@/components/canCopyBlock";
 
 
 
@@ -76,6 +78,25 @@ export default function DashboardTimeLine({ params: { id, grade, classNumber } }
                         )
                         : <LoadingWithSidebar />
                 }
+            </Content>
+            <Title title="その他設定" />
+            <Content>
+                <Infomation className="text-xl">
+                    <h1 className="text-2xl font-semibold"> ここの設定は現在準備中です。 </h1>
+                    <p className="pb-2"> そのうち追加されます。 </p>
+                </Infomation>
+                <br />
+                その他の設定は危険な操作も含まれています。十分にご注意ください。
+                <Title title="クラスのAPIパス（開発者向け）" />
+                <Content IsCenter={false}>
+                    ( TODO : クラスのAPIパスの説明 ) <br />
+                    {`https://hss-dev.aknet.tech/v1/school/${id}/patchsetting/${grade}/${classNumber}`}
+                </Content>
+                <Title title="クラス削除" />
+                <Content className="flex flex-col gap-4">
+                    TODO : クラス削除の説明
+                    <Button color="danger" className="py-2" disabled> クラスを削除する </Button>
+                </Content>
             </Content>
         </SidebarComopnent>
     )

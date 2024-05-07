@@ -46,7 +46,8 @@ export default function DashboardTimeLine({ params: { id } }: { params: { id: st
         })
         if( response.ok ){
             const data = await response.json()
-            setLogs(data.body.logs)
+            const logs = data.body.logs as Log[]
+            setLogs( logs.reverse() )
         }
     }
 

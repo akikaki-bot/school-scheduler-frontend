@@ -18,7 +18,7 @@ export default function Layout({ children } : { children : ReactNode }) {
 
     if( typeof data.serverAdmin === "undefined" || data.serverAdmin === false ) return (
         <div className="flex flex-col items-center justify-center min-h-screen">
-            <Image alt="403" src="/Forbidden.png" width={400} height={400} />
+            <Image alt="403 forbidden - credit sawaratsuki1004" src="/Forbidden.png" width={400} height={400} />
             <Button color="primary" className="mt-4" href="/">ホームに戻る</Button>
         </div>
     )

@@ -1,20 +1,22 @@
 import Link from "next/link";
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import { useState } from "react";
 import { HomeIcon } from "./icons";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 
 type Sidebar = {
     label: string,
     href: string,
     iconSVG?: ReactNode
-    isClassMenu ?: boolean
+    isClassMenu ?: boolean,
+    tag : string
 }
 
 
 const SidebarMenus: Sidebar[] = [
     {
         label: "メインページ",
+        tag : "main",
         href: "/",
         iconSVG: (
             <path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z"/>
@@ -23,6 +25,7 @@ const SidebarMenus: Sidebar[] = [
     {
         label: "設定（学校）",
         href: "/settings",
+        tag : "settings",
         iconSVG: (
             <>
                 <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 13v-2a1 1 0 0 0-1-1h-.8l-.7-1.7.6-.5a1 1 0 0 0 0-1.5L17.7 5a1 1 0 0 0-1.5 0l-.5.6-1.7-.7V4a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v.8l-1.7.7-.5-.6a1 1 0 0 0-1.5 0L5 6.3a1 1 0 0 0 0 1.5l.6.5-.7 1.7H4a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h.8l.7 1.7-.6.5a1 1 0 0 0 0 1.5L6.3 19a1 1 0 0 0 1.5 0l.5-.6 1.7.7v.8a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-.8l1.7-.7.5.6a1 1 0 0 0 1.5 0l1.4-1.4a1 1 0 0 0 0-1.5l-.6-.5.7-1.7h.8a1 1 0 0 0 1-1Z"/>
@@ -33,6 +36,7 @@ const SidebarMenus: Sidebar[] = [
     {
         label: "クラス選択",
         href: "timeline",
+        tag : "timeline",
         iconSVG: (
             <path d="M6.143 0H1.857A1.857 1.857 0 0 0 0 1.857v4.286C0 7.169.831 8 1.857 8h4.286A1.857 1.857 0 0 0 8 6.143V1.857A1.857 1.857 0 0 0 6.143 0Zm10 0h-4.286A1.857 1.857 0 0 0 10 1.857v4.286C10 7.169 10.831 8 11.857 8h4.286A1.857 1.857 0 0 0 18 6.143V1.857A1.857 1.857 0 0 0 16.143 0Zm-10 10H1.857A1.857 1.857 0 0 0 0 11.857v4.286C0 17.169.831 18 1.857 18h4.286A1.857 1.857 0 0 0 8 16.143v-4.286A1.857 1.857 0 0 0 6.143 10Zm10 0h-4.286A1.857 1.857 0 0 0 10 11.857v4.286c0 1.026.831 1.857 1.857 1.857h4.286A1.857 1.857 0 0 0 18 16.143v-4.286A1.857 1.857 0 0 0 16.143 10Z" />
         )
@@ -40,6 +44,7 @@ const SidebarMenus: Sidebar[] = [
     {
         label : "クラスメインメニュー",
         href: "/",
+        tag : "class",
         iconSVG: (
             <>
             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 1v3m5-3v3m5-3v3M1 7h18M5 11h10M2 3h16a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z"/>             </>
@@ -49,6 +54,7 @@ const SidebarMenus: Sidebar[] = [
     {
         label : "クラス宿題設定",
         href : "homework",
+        tag : "homework",
         iconSVG: (
             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.779 17.779 4.36 19.918 6.5 13.5m4.279 4.279 8.364-8.643a3.027 3.027 0 0 0-2.14-5.165 3.03 3.03 0 0 0-2.14.886L6.5 13.5m4.279 4.279L6.499 13.5m2.14 2.14 6.213-6.504M12.75 7.04 17 11.28"/>
         ),
@@ -57,6 +63,7 @@ const SidebarMenus: Sidebar[] = [
     {
         label : "クラスイベント設定",
         href : "events",
+        tag : "events",
         iconSVG: (
             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 9H5a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h6m0-6v6m0-6 5.419-3.87A1 1 0 0 1 18 5.942v12.114a1 1 0 0 1-1.581.814L11 15m7 0a3 3 0 0 0 0-6M6 15h3v5H6v-5Z"/>
         ),
@@ -65,6 +72,7 @@ const SidebarMenus: Sidebar[] = [
     {
         label : "設定（クラス）",
         href: "settings",
+        tag : "settings_class",
         iconSVG: (
             <>
                 <path d="M6.5 8C5.80777 8 5.13108 7.79473 4.55551 7.41015C3.97993 7.02556 3.53133 6.47893 3.26642 5.83939C3.00152 5.19985 2.9322 4.49612 3.06725 3.81719C3.2023 3.13825 3.53564 2.51461 4.02513 2.02513C4.51461 1.53564 5.13825 1.2023 5.81719 1.06725C6.49612 0.932205 7.19985 1.00152 7.83939 1.26642C8.47893 1.53133 9.02556 1.97993 9.41015 2.55551C9.79473 3.13108 10 3.80777 10 4.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -77,6 +85,7 @@ const SidebarMenus: Sidebar[] = [
     {
         label : "ログ",
         href : "logs",
+        tag : "logs",
         iconSVG : (
             <>
                 <path stroke="currentColor" strokeLinejoin="round" strokeWidth="2" d="M10 12v1h4v-1m4 7H6a1 1 0 0 1-1-1V9h14v9a1 1 0 0 1-1 1ZM4 5h16a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z"/>
@@ -88,8 +97,16 @@ const SidebarMenus: Sidebar[] = [
 
 export function SidebarComopnent({ sid, classMenu = false, grade , classNumber , children }: { sid: string, classMenu ?: boolean , grade ?: number, classNumber ?: number, children: ReactNode }) {
 
-    const router = useRouter()
     const [isOpen, setOpen] = useState( false )
+    const [ currentMenu , setCurrentMenu ] = useState<string | null>(null)
+
+    useEffect(() => {
+        const location = window.location.pathname.split("/").pop();
+        if( location === sid ) return setCurrentMenu("main")
+        if( typeof classNumber !== "undefined" && location === "settings" ) return setCurrentMenu("settings_class")
+        if( typeof classNumber !== "undefined" && location === classNumber.toString() ) return setCurrentMenu("class")
+        setCurrentMenu( ( location === "" || typeof location === "undefined" ) ? "main" : location)
+    }, [])
 
     return (
         <main>
@@ -127,10 +144,10 @@ export function SidebarComopnent({ sid, classMenu = false, grade , classNumber ,
                                 classMenu === menu.isClassMenu 
                             ) && (
                                 <li key={index}>
-                                    <Link onClick={() => setOpen(false)} href={!menu.isClassMenu ? `/dashboard/${sid}/${menu.href}` : `/dashboard/${sid}/timeline/${grade}/${classNumber}/${menu.href}`} className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                                    <Link onClick={() => { setOpen(false);  }} href={!menu.isClassMenu ? `/dashboard/${sid}/${menu.href}` : `/dashboard/${sid}/timeline/${grade}/${classNumber}/${menu.href}`} className={`flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 ${currentMenu === menu.tag ? "dark:bg-gray-700 bg-gray-100" : " "} dark:hover:bg-gray-700  group `}>
                                         {
                                             typeof menu.iconSVG !== "undefined" && (
-                                                <svg className="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21">
+                                                <svg className="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21">
                                                     {menu.iconSVG}
                                                 </svg>
                                             )

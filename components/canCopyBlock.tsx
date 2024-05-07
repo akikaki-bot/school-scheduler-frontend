@@ -16,9 +16,9 @@ export function CanCopyBlock({ value }: { value : ValueResovled }){
     }
 
     return (
-        <button aria-label={`${value}をクリップボードにコピー`} className="rounded-lg border-1 border-gray-200 py-[0.005rem] px-1 bg-white" onClick={() => copyToClipboard()}>
+        <button aria-label={`${value}をクリップボードにコピー`} className="rounded-lg border-1 border-gray-200 py-[0.005rem] px-1 bg-white object-cover" onClick={() => copyToClipboard()}>
             <code>
-                <div className="flex gap-4 items-center">{ value } { ok ? <SuccessCopy /> : <CopyEmoji />}</div>
+                <div className="flex gap-4 object-cover">{ value } { ok ? <SuccessCopy /> : <CopyEmoji />}</div>
             </code>
         </button>
     )
