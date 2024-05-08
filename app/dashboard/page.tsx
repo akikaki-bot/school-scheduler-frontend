@@ -1,13 +1,13 @@
 "use client";
 import { About } from '@/components/about';
-import { ParticlesBackGround } from '@/components/background-particles';
 import { LetsStart } from '@/components/letsget';
 import { Loading } from '@/components/loading';
 import { UserComponent } from '@/components/usercomponent';
 import { API_URL } from '@/constants/setting';
 import { User } from '@/constants/types/user';
+import { auth } from '@/lib/auth';
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Input } from '@nextui-org/react';
-import { createCipheriv, randomBytes } from 'crypto';
+import { signIn } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react'
@@ -15,6 +15,8 @@ import { useEffect, useState } from 'react'
 
 
 export default function Dashboard() {
+
+    
 
     const [loginform, changeLoginForm] = useState(false)
 
@@ -77,8 +79,7 @@ export default function Dashboard() {
                     <>
                         <ModalHeader className="flex flex-col gap-1 text-2xl">HSS Dev.にログイン</ModalHeader>
                         <ModalBody>
-                            <Button color="primary" onPress={() => router.push('/api/v1/login')}> Discordアカウントでログイン </Button>
-                            <div> アカウントがありませんか？ <Link href="/register" className=" text-blue-500">ここから作成してください。</Link></div>
+                            <Button color="primary" onPress={() => router.push('/login')}> ログインページに飛ぶ </Button>
                         </ModalBody>
                     </>
                 </ModalContent>

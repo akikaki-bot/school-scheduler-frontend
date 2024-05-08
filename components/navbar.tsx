@@ -43,8 +43,8 @@ const LinkConstants : NavLink[] = [
 ]
 
 export function NavigationBar() {
+    const [Open, OpenChange] = useState<boolean>(false)
     const { data } = useUser();
-    const [Open, OpenChange] = useState(false)
 
     function isServerAdmin( bool : boolean | undefined ){
         if( bool === undefined ) return false;
@@ -52,7 +52,7 @@ export function NavigationBar() {
     }
 
     return (
-        <Navbar disableAnimation>
+        <Navbar disableAnimation isMenuOpen={ Open } onMenuOpenChange={ OpenChange }>
             <NavbarBrand>
                 {/*<Image className="rounded-full" src="/logo.png" height={36} width={36} alt="ロゴ" /> */}
                 <Link href="/">
