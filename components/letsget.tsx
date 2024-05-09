@@ -15,7 +15,7 @@ export function LetsStart() {
                 <div className="px-3 text-xl sm:text-2xl font-semibold py-10 opacity-100"> 
                     <div className="text-gray-800">
                         <div className="pb-4 min-w-full">
-                            <h1><span className="bg-yellow-200 px-1">ダッシュボードから確認してみる</span></h1>
+                            <h1><span className="bg-yellow-200 px-1">ダッシュボードから確認してみる。</span></h1>
                             <p className="px-2 pb-2">APIの使い方がわからない方のために、ダッシュボードを用意しています。まずはこちらからでも！</p>
                             <Link href="/dashboard">
                                 <Button color="primary">ダッシュボードを起動する</Button>
