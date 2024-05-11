@@ -14,7 +14,7 @@ export default async function Login() {
                 </Link>
                 <form action={ async() => {
                     'use server';
-                    await signIn("google", { redirectTo: "http://localhost:3000/login/callback" });
+                    await signIn("google", { redirectTo: "/login/callback" });
                 }}
                 >
                     <Button type="submit" color="secondary"> Googleアカウントでログイン </Button>
