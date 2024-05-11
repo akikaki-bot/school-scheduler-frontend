@@ -280,6 +280,10 @@ export default function User() {
                 </Content>
                 <Title title={`アクセストークン (${!isV2token ? "!!!" : "高度な設定"})`} />
                 <Content>
+                    <Infomation className="text-xl">
+                        <h1 className="text-2xl font-semibold"> Googleアカウントでの認証が解放されました🥳 </h1>
+                        <p> V2トークンユーザー（バッチが💎）が対象になります。まだこのバッチがついてないユーザーはアクセストークンの再生成をお願いします。</p>
+                    </Infomation>
                     {/*!isV2token && (
                         <Warning className="text-xl">
                             利用者の方へ：アクセストークンは只今、v2にアップデートされています。
