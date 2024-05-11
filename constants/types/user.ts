@@ -199,6 +199,7 @@ export interface homeworkDataChangeRequest {
 export interface BaseUser {
     hid : string
     discordAccount ?: boolean
+    googleAccount ?: boolean
     username : string
     email ?: string
 }

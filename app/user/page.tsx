@@ -262,8 +262,8 @@ export default function User() {
                             <div className="ps-1"> <CanCopyBlock value={user.data?.hid ?? 0} /> </div>
                             <div className="flex items-center ps-1">
                                 { user.data?.developer && <PopupBatch title="あなたは究極なデベロッパー！" emoji="📎" description="あなたは究極なデベロッパーです。" /> }
-                                
                                 { user.data?.serverAdmin && <PopupBatch title="究極な管理者" emoji="👑" description="強そうな権限をあなたはもっています。" /> }
+                                { user.data?.googleAccount && <PopupBatch title="Googleアカウント連携" emoji="🐉" description="GoogleアカウントとHSSアカウントが紐づけされています。" /> }
                                 { user.data?.discordAccount && <PopupBatch title="Discordアカウント連携" emoji="🐽" description="DiscordアカウントとHSSアカウントが紐づけされています。" /> }
                                 { user.data?.isBot && <PopupBatch title="You are bot" emoji="🤖" description="ｱﾚ ﾅﾝﾃﾞｱﾅﾀ ｺﾚｦﾐﾚﾃｲﾙ ﾝﾀﾞ" /> }
                                 { isV2token && <PopupBatch title="You are version 2" emoji="💎" description="バージョン２のユーザー！" /> }

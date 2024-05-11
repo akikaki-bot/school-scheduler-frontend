@@ -1,4 +1,5 @@
 "use client";
+import { PopupBatch } from "@/components/popupBatch";
 import { AdminSidebarComopnent } from "@/components/serverAdminSidebar";
 import { Title } from "@/components/title";
 import { Warning } from "@/components/warning";
@@ -104,11 +105,13 @@ export default function DashboardAdminPage() {
                                     if( user === null ) return;
                                     if( filter === "user" && user.isBot ) return;
                                     if( filter === "bot" && !user.isBot ) return;
+                                    if( user.hid === null ) return;
                                     return (
                                     <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                         <th scope="row" className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
                                             <div className="ps-3">
                                                 <div className="text-base font-semibold">{ user?.username ?? "null" }</div>
+                                                <div className="text-xs font-normal text-gray-500 dark:text-gray-400">{ user?.hid ?? "null" }</div>
                                                 {showEmail && ( <div className="font-normal text-gray-200">{ user.email }</div> )}
                                             </div>  
                                         </th>
@@ -117,10 +120,9 @@ export default function DashboardAdminPage() {
                                         </td>
                                         <td className="px-6 py-4">
                                             <div className="flex items-center">
-                                                <div className={`h-2.5 w-2.5 rounded-full ${user?.discordAccount ? "bg-green-500" : "bg-red-500"} me-2`}></div> DA {user.discordAccount ? "" : "not"} Link{user.discordAccount ? "ed" : ""}
+                                                { user.discordAccount && <PopupBatch title="Discordアカウントとリンク済み" emoji="🐽" description="リンク済み。" />}
+                                                { user.googleAccount && <PopupBatch title="Googleアカウントとリンク済み" emoji="🐉" description="リンク済み。" />}
                                             </div>
-                                        </td>
-                                        <td className="px-6 py-4">
                                         </td>
                                     </tr>
                                 )})

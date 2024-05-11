@@ -4,8 +4,6 @@ import Link from "next/link";
 
 
 export default async function Login() {
-
-    const session = await auth();
     
     return (
         <div className="flex min-h-screen justify-center items-center flex-col p-12 sm:p-24">
@@ -19,7 +17,7 @@ export default async function Login() {
                     await signIn("google", { redirectTo: "http://localhost:3000/login/callback" });
                 }}
                 >
-                    <Button type="submit" color="warning" disabled> ComingSoon... </Button>
+                    <Button type="submit" color="secondary"> Googleアカウントでログイン </Button>
                 </form>
                 <div> アカウントがありませんか？ <Link href="/register" className=" text-blue-500">ここから作成してください。</Link></div>
             </div>
