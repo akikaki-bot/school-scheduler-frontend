@@ -72,7 +72,7 @@ export default function DashboardTimeLine({ params: { id, grade, classNumber } }
             },
             credentials: "same-origin",
             body: JSON.stringify({
-                grade: grade,
+                grade: +grade,
                 classNumber: classNumber
             })
         })
