@@ -7,7 +7,7 @@ import { loginForward } from "./loginForward";
 
 
 
-export function useSchool( id : string ) {
+export function useSchool( id : string , workerEnable : boolean = true ) {
     const router = useRouter()
     const [ data , setData ] = useState<BaseScheme | null>( null );
     const [ user , setUser ] = useState<User | null>(null)
@@ -24,6 +24,7 @@ export function useSchool( id : string ) {
             }
         })()
         console.log(`[Worker] Registered worker`)
+        if( !workerEnable ) return console.log(`[Worker] Worker disabled`);
         const interval = setInterval(async () => {
             await GetSchoolData( id )
         }, 1000 * 10)

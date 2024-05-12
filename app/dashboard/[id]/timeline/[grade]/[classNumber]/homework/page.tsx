@@ -103,7 +103,6 @@ export default function DashboardTimeLine({ params: { id, grade, classNumber } }
                 bodies : [ data ]
             })
         })
-
         if(!response.ok) return setErr("エラーが発生しました... :( "+response.statusText )
         deleteOnOpenChange()
         updateData();

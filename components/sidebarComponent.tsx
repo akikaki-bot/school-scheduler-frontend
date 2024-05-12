@@ -3,6 +3,7 @@ import { ReactNode, useEffect } from "react";
 import { useState } from "react";
 import { HomeIcon } from "./icons";
 import { useRouter } from "next/router";
+import { useSchool } from "@/hooks/useSchool";
 
 type Sidebar = {
     label: string,
@@ -100,6 +101,8 @@ export function SidebarComopnent({ sid, classMenu = false, grade , classNumber ,
     const [isOpen, setOpen] = useState( false )
     const [ currentMenu , setCurrentMenu ] = useState<string | null>(null)
 
+    const { data } = useSchool( sid , false );
+
     useEffect(() => {
         const location = window.location.pathname.split("/").pop();
         if( location === sid ) return setCurrentMenu("main")
@@ -119,6 +122,10 @@ export function SidebarComopnent({ sid, classMenu = false, grade , classNumber ,
             <aside id="default-sidebar" className={`fixed top-[64px] left-0 z-40 w-64 h-screen transition-transform ${isOpen ? "-translate-x-0" : "-translate-x-full"} sm:translate-x-0`} aria-label="Sidebar">
                 <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
                     <ul className="space-y-2 font-medium">
+                        <li className="ms-2">
+                            <h1 className="text-xl"> { data?.details.name } </h1>
+                            <p className="text-sm text-gray-600"> { data?.details.id }</p>
+                        </li>
                         {   
                             isOpen && (
                                 <li>
