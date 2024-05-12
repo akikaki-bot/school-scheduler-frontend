@@ -70,7 +70,11 @@ export default function DashboardTimeLine({ params: { id, grade, classNumber } }
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${localStorage.getItem('user')}`
             },
-            credentials: "same-origin"
+            credentials: "same-origin",
+            body: JSON.stringify({
+                grade: grade,
+                classNumber: classNumber
+            })
         })
         if (!response.ok) return setErr('エラーが発生しました。正常にクラスが削除できませんでした。');;
         router.push(`/dashboard/${id}/timeline`)
