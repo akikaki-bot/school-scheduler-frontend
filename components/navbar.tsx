@@ -39,6 +39,10 @@ const LinkConstants : NavLink[] = [
         label : "管理者メニュー / Admin",
         href : "/dashboard/admin",
         isAdminMenu : true
+    },
+    {
+        label : "法的表示 / Legal",
+        href : "/terms"
     }
 ]
 
