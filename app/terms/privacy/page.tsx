@@ -191,12 +191,12 @@ export default function APITerms() {
                 <div className="flex flex-col gap-4">
                     <h1 className="text-3xl font-bold"> 9. お問い合わせ窓口 </h1>
                     <div className="text-xl">
-                        本ポリシーに関するお問い合わせは、Discordサーバー、運営者( akikaki )へのDM、もしくは hello[at]aknet.tech ([at]をアットマークに変換してください。) へメールをお願いいたします。
+                        本ポリシーに関するお問い合わせは、Discordサーバー、運営者( akikaki )へのDM、もしくは hss-service[at]akikaki.net ([at]をアットマークに変換してください。) へメールをお願いいたします。
                     </div>
                 </div>
             </div>
             <div className="flex flex-col gap-4">
-                <p> 利用規約 2024/05/18 更新 </p>
+                <p> 利用規約 2024/08/17 更新 - メールアドレスを変更いたしました。 </p>
             </div>
         </main>
     )
