@@ -3,6 +3,7 @@ import { Inter, Noto_Sans_JP } from 'next/font/google'
 import './globals.css'
 import { Root } from './root'
 import { NavigationBar } from '@/components/navbar'
+import { NprogressProvider } from '@/provider/nProgress'
 
 const inter = Noto_Sans_JP({ subsets: ['latin'] })
 
@@ -22,8 +23,10 @@ export default function RootLayout({
 		<html lang="ja">
 			<body className={inter.className}>
 				<Root>
-					<NavigationBar />
-					{children}
+					<NprogressProvider>
+						<NavigationBar />
+						{children}
+					</NprogressProvider>
 				</Root>
 			</body>
 		</html>

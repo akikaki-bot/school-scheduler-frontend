@@ -95,7 +95,6 @@ export default function DashboardAdd() {
 
     return (
         <main className="flex min-h-screen flex-col p-12 sm:p-24 justify-center items-center">
-            <h1 className="text-5xl font-semibold"> （なにもないばしょ） </h1>
             <Modal
                 size="lg"
                 isOpen={true}
@@ -106,7 +105,7 @@ export default function DashboardAdd() {
                         <ModalHeader className="flex flex-col gap-1 text-2xl">学校を新規で登録する</ModalHeader>
                         <ModalBody>
                             <Input isInvalid={invaild} type="text" placeholder="なんとか高等学校" label={<p className="font-bold">学校名</p>} onChange={(e) => setSchool(e.target.value)} />
-                            <Select isInvalid={isNotSelected} placeholder="普通高校" label={<p className="font-bold">学校のタイプ</p>} onChange={(e) => setType(e.target.value)}>
+                            <Select isInvalid={isNotSelected} label={<p className="font-bold">学校のタイプ</p>} onChange={(e) => setType(e.target.value)}>
                                 {
                                     Schools.map((data, index) => (
                                         <SelectItem key={index} value={data.value}>
